@@ -798,6 +798,13 @@ dojo.declare("classes.ui.DesktopUI", classes.ui.UISystem, {
         }
         $("body").removeClass();
         $("body").addClass("scheme_" + game.colorScheme);
+        // the sheet of a scheme is fetched the first time that scheme is used (boot only
+        // preloads the saved one), hence loadTheme() here. shortcut: switching to a scheme
+        // for the first time can paint the base scheme for a moment while its 7 KB sheet
+        // arrives; prefetch the schemes of the options dropdown if that ever matters.
+        if (window.loadTheme) {
+            window.loadTheme(game.colorScheme, window.buildRevision);
+        }
         if (!game.opts.hideBGImage) {
             $("body").addClass("with_background_image");
         }

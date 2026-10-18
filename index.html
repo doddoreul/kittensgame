@@ -115,12 +115,15 @@
 				}
 			}
 
+			var loadedThemes = {};
+
 			function loadTheme(themeId, timestamp){
 				// the default scheme is the base stylesheet (res/default.css) and has no
 				// res/theme_default.css: requesting it only logged a 404 on every boot
-				if (themeId === "default") {
+				if (themeId === "default" || loadedThemes[themeId]) {
 					return;
 				}
+				loadedThemes[themeId] = true;
 				$("<link />")
 					.attr("rel", "stylesheet")
 					.attr("type", "text/css")
@@ -203,15 +206,11 @@
 					$("#versionLink").html(version + channelSuffix + ".r" + buildRevision);
 				});
 				def = _import("config", def);
-				def.then(function() {
-					var schemes = new classes.KGConfig().statics.schemes;
-					for (var i = 0; i < schemes.length; ++i) {
-						//todo: skip theme if preloaded
-						if (!uiSettings || uiSettings.theme != schemes[i]){
-							loadTheme(schemes[i], buildRevision);
-						}
-					}
-				});
+				// Themes are no longer preloaded here: all 27 sheets used to be appended to
+				// the head on every boot (~1.1 MB of CSS, 27 render-blocking stylesheets)
+				// whether or not the player ever used them. loadTheme() now fetches the
+				// sheet of the active scheme only, and js/ui.js loads one on demand when the
+				// player switches.
 
 				def = _import("i18n", def);
 				def.then(function () {
