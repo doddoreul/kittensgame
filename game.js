@@ -3224,6 +3224,9 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 			var data = $("#importData").val().replace(/\s/g, "");
 			if (data) {
 				game.saveImportText(data, function(error) {
+					if (error) {
+						game.msg($I("save.import.error.msg"));
+					}
 					$("#importDiv").hide();
 					$("#optionsDiv").hide();
 				});

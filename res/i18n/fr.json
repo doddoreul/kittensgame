@@ -1354,6 +1354,7 @@
     "save.fail": "Impossible de sauvegarder le jeu — le stockage local est plein ou indisponible ! Exportez votre sauvegarde manuellement pour éviter de perdre votre progression.",
     "save.import.confirmation.msg": "Voulez-vous vraiment continuer ? Ceci remplacera votre sauvegarde !",
     "save.import.msg": "Import de la sauvegarde réussi !",
+    "save.import.error.msg": "Échec de l'importation : ces données ne sont pas une sauvegarde valide.",
     "save.import.fail": "Impossible de charger la sauvegarde cloud : {0}.",
     "save.update.fail": "Impossible de mettre à jour la sauvegarde cloud : {0}.",
     "science.policyToggleBlocked.label": "Masquer les politiques bloquées",

@@ -28,7 +28,7 @@ WCollapsiblePanel = React.createClass({
                             href: "#!",
                             className:"link collapse", 
                             onClick: this.toggleCollapsed,
-                            tabindex: 1,
+                            tabindex: 0,
                             title: this.props.title
                         },
                         this.state.isCollapsed ? ">(" +  this.props.title + ")" : 
@@ -606,7 +606,7 @@ WResourceTable = React.createClass({
                             href: "#!", 
                             className:"link collapse", 
                             onClick: this.toggleCollapsed,
-                            tabindex: 1,
+                            tabindex: 0,
                             title: "Toggle resources",
                         },
                         this.state.isCollapsed ? ">(" + $I("left.resources") + ")" : $r("div", {
@@ -620,7 +620,7 @@ WResourceTable = React.createClass({
                         onClick: this.toggleEdit,
                         onKeyDown: this.onKeyDown,
                         title:  "Resource settings",
-                        tabIndex: 1
+                        tabIndex: 0
                     }, 
                         $r("div", {
                             className: "svg-icon gear"
@@ -630,7 +630,7 @@ WResourceTable = React.createClass({
                         $r("div", {
                             className: "svg-icon question-mark"
                         }), 
-                    tabindex: 1}, 
+                    tabindex: 0}, 
                     $I("left.resources.tip"))
                 
                 )
@@ -718,7 +718,7 @@ WCraftTable = React.createClass({
                     $r("a", {
                             className:"link collapse", 
                             onClick: this.toggleCollapsed,
-                            tabindex: 1,
+                            tabindex: 0,
                             title: "Toggle craft",
                         },
                         this.state.isCollapsed ? ">(" + $I("left.craft") + ")" : $r("div", {
@@ -732,7 +732,7 @@ WCraftTable = React.createClass({
                         className: "link" + (this.state.isEditMode ? " toggled" : ""), 
                         onClick: this.toggleEdit,
                         onKeyDown: this.onKeyDown,
-                        tabindex: 1
+                        tabindex: 0
                     },              
                         $r("div", {
                             className: "svg-icon gear",

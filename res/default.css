@@ -188,7 +188,6 @@ div#gameLog {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3), 0 2px 10px 0 rgba(0, 0, 0, 0.3) !important;
     border: none !important;
     border-radius: 1px !important;
-    outline: 0 !important;
     color: black;
     padding: 5px 20px;
 }
@@ -916,7 +915,7 @@ label:hover {
     padding-left: 20px;
 }
 
-h1 {
+h1, h2 {
     font-size: 12px;
     color: Coral;
     text-transform: uppercase;
@@ -2148,3 +2147,16 @@ body.preview-mode .btn.small-text span {
     font-size: 100%;
 }
 
+
+/* keyboard focus visibility: legacy themes strip button outlines with outline:0 !important,
+   this restores a visible ring for keyboard users only.
+   shortcut: :focus-visible is ignored by legacy IE, those fall back to the UA focus ring; drop this note when the IE support goal goes */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid #4a90d9 !important;
+    outline-offset: 2px;
+}
+
+.dialog input[type="button"]:focus-visible {
+    outline: 2px solid #4a90d9 !important;
+    outline-offset: 2px;
+}

@@ -3,3 +3,4 @@ yarn-error.log
 build.version.json
 .aider*
 server/
+.impeccable/hook.cache.json

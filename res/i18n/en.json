@@ -1403,6 +1403,7 @@
     "save.fail": "Could not save the game — local storage is full or unavailable! Export your save manually to avoid losing progress.",
     "save.import.confirmation.msg": "Are your sure? This will overwrite your save!",
     "save.import.msg": "Save import successful!",
+    "save.import.error.msg": "Import failed: this data is not a valid save export.",
     "save.import.fail": "Could not load the cloud save: {0}.",
     "save.update.fail": "Could not update the cloud save: {0}.",
 

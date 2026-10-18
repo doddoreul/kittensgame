@@ -250,6 +250,7 @@ WQueue = React.createClass({
                     type:"checkbox", 
                     checked: game.time.queue.alphabeticalSort,
                     onClick: self.toggleAlphabetical,
+                    "aria-label": $I("queue.alphabeticalToggle"),
                     style:{display:"inline-block"},
                 }),
                 $I("queue.alphabeticalToggle")
