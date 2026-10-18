@@ -123,6 +123,19 @@
 					.appendTo($("head"));
 			}
 
+			// The phone/tablet layout (<= 1179px) scrolls the page itself, so the game's
+			// own "#"/"#!" links have nowhere to jump to: without this, every tab tap
+			// threw the player back to the top of the page. Above 1179px the desktop
+			// panes keep their geometry and this handler returns immediately.
+			document.addEventListener("click", function (e) {
+				if (!window.matchMedia || !window.matchMedia("(max-width: 1179px)").matches) { return; }
+				var node = e.target;
+				while (node && node.tagName !== "A" && node !== document.body) { node = node.parentNode; }
+				if (!node || node.tagName !== "A") { return; }
+				var href = node.getAttribute("href");
+				if (href === "#" || href === "#!") { e.preventDefault(); }
+			}, true);
+
 			dojo.addOnLoad(function() {
 				var channelSuffix = ""; // version now comes from version.json; .rN still from build.version.json
 				if (window.location.href.indexOf("alpha") >= 0) {
