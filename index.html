@@ -116,6 +116,11 @@
 			}
 
 			function loadTheme(themeId, timestamp){
+				// the default scheme is the base stylesheet (res/default.css) and has no
+				// res/theme_default.css: requesting it only logged a 404 on every boot
+				if (themeId === "default") {
+					return;
+				}
 				$("<link />")
 					.attr("rel", "stylesheet")
 					.attr("type", "text/css")
