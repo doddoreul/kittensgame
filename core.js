@@ -1209,7 +1209,7 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 				display: "none",
 				position: "absolute",
 				float: "right",
-				marginTop: "35px",
+				bottom: "100%",
 				zIndex: "100"
 			},
 		}, linksDiv);
