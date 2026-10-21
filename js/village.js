@@ -4634,7 +4634,7 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 		var model = this.inherited("fetchModel", arguments);
 		var self = this;
 		//We will generate links for assigning/unassigning this many kittens:
-		var LINK_AMOUNTS = [5, 25, 100];
+		var LINK_AMOUNTS = [5];
 
 		//Links for +/- 1
 		model.unassignLinks = [{
@@ -4676,21 +4676,6 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 					self.assignJobs(model, amt);
 				}
 			});
-		});
-		//Links for +/- ALL
-		model.unassignLinks.push({
-			id: "unassignAll",
-			title: $I("btn.all.unassign").replace(/[[\]]/g, ""),
-			handler: function() {
-				self.unassignAllJobs(model);
-			}
-		});
-		model.assignLinks.push({
-			id: "assignall",
-			title: $I("btn.all.assign").replace(/[[\]]/g, ""),
-			handler: function() {
-				self.assignAllJobs(model);
-			}
 		});
 		return model;
 	},
