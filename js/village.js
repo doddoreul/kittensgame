@@ -4709,9 +4709,9 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButton", com.nuclearunicorn.game.ui.
 
 	renderLinks: function(){
 
-		this.unassignLinks = this.addLinkList(this.model.unassignLinks);
-
 		this.assignLinks = this.addLinkList(this.model.assignLinks);
+
+		this.unassignLinks = this.addLinkList(this.model.unassignLinks);
 	},
 
 	update: function () {
