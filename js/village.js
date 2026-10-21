@@ -4639,7 +4639,7 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 		//Links for +/- 1
 		model.unassignLinks = [{
 			id: "unassign",
-			title: "[&ndash;]",
+			title: "&ndash;",
 			alt: "minus",
 			handler: function() {
 				self.unassignJobs(model, 1);
@@ -4647,7 +4647,7 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 		}];
 		model.assignLinks = [{
 			id: "assign",
-			title: "[+]",
+			title: "+",
 			alt: "plus",
 			handler: function() {
 				self.assignJobs(model, 1);
@@ -4664,14 +4664,14 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 			}
 			model.unassignLinks.push({
 				id: "unassign" + amt,
-				title: "[-" + amt + "]",
+				title: "-" + amt,
 				handler: function() {
 					self.unassignJobs(model, amt);
 				}
 			});
 			model.assignLinks.push({
 				id: "assign" + amt,
-				title: "[+" + amt + "]",
+				title: "+" + amt,
 				handler: function(){
 					self.assignJobs(model, amt);
 				}
@@ -4680,14 +4680,14 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 		//Links for +/- ALL
 		model.unassignLinks.push({
 			id: "unassignAll",
-			title: $I("btn.all.unassign"),
+			title: $I("btn.all.unassign").replace(/[[\]]/g, ""),
 			handler: function() {
 				self.unassignAllJobs(model);
 			}
 		});
 		model.assignLinks.push({
 			id: "assignall",
-			title: $I("btn.all.assign"),
+			title: $I("btn.all.assign").replace(/[[\]]/g, ""),
 			handler: function() {
 				self.assignAllJobs(model);
 			}
@@ -4709,9 +4709,12 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButton", com.nuclearunicorn.game.ui.
 
 	renderLinks: function(){
 
-		this.assignLinks = this.addLinkList(this.model.assignLinks);
-
-		this.unassignLinks = this.addLinkList(this.model.unassignLinks);
+		//one link per float, created last-to-first because floats stack right to left
+		var links = this.model.unassignLinks.concat(this.model.assignLinks);
+		this.jobLinks = {};
+		for (var i = links.length - 1; i >= 0; i--) {
+			this.jobLinks[links[i].id] = this.addLinkList([links[i]]);
+		}
 	},
 
 	update: function () {
