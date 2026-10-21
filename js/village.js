@@ -4696,9 +4696,57 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButton", com.nuclearunicorn.game.ui.
 
 		//one link per float, created last-to-first because floats stack right to left
 		var links = this.model.unassignLinks.concat(this.model.assignLinks);
-		this.jobLinks = {};
+		this.jobLinkEls = [];
 		for (var i = links.length - 1; i >= 0; i--) {
-			this.jobLinks[links[i].id] = this.addLinkList([links[i]]);
+			var linkList = this.addLinkList([links[i]]);
+			this.jobLinkEls.push({ el: linkList[links[i].id].link, display: linkList[links[i].id].link.style.display });
+		}
+		this.renderMaxLinks();
+	},
+
+	//hovering the job with shift held swaps the job links for the "assign/unassign
+	//all" ones (shift+click already assigns every kitten to the job)
+	renderMaxLinks: function(){
+		var self = this;
+		this.maxLinkEls = [];
+		var maxLinks = [
+			{ id: "assignAll", title: "+ max", handler: function(btn, callback){
+				self.controller.assignAllJobs(self.model);
+				callback(true);
+			}},
+			{ id: "unassignAll", title: "- max", handler: function(btn, callback){
+				self.controller.unassignAllJobs(self.model);
+				callback(true);
+			}}
+		];
+		for (var j = 0; j < maxLinks.length; j++) {
+			var link = this.addLink(maxLinks[j]).link;
+			link.style.display = "none";
+			this.maxLinkEls.push(link);
+		}
+		this.maxLinksShown = false;
+		dojo.connect(this.domNode, "onmousemove", function(event){
+			self.showMaxLinks(event.shiftKey);
+		});
+		dojo.connect(this.domNode, "onmouseout", function(event){
+			var to = event.relatedTarget;
+			if (to && dojo.isDescendant(self.domNode, to)) {
+				return; //the pointer moved to a child of the button, keep the links as they are
+			}
+			self.showMaxLinks(false);
+		});
+	},
+
+	showMaxLinks: function(show){
+		if (this.maxLinksShown === show) {
+			return;
+		}
+		this.maxLinksShown = show;
+		for (var i = 0; i < this.jobLinkEls.length; i++) {
+			this.jobLinkEls[i].el.style.display = show ? "none" : this.jobLinkEls[i].display;
+		}
+		for (var j = 0; j < this.maxLinkEls.length; j++) {
+			this.maxLinkEls[j].style.display = show ? "" : "none";
 		}
 	},
 
