@@ -552,6 +552,29 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 	font-weight: bold;
 }
 
+/* the sell / on-off / automation links do not fit next to the label in a 264px
+   button: as floats the last one wrapped under the button and overflowed it.
+   Flex keeps them on a single line, the label shrinks instead.
+   #game prefix: the #game * reset above would win over a class only selector. */
+#game .btn.modern .btnContent:has(a.bld-on, a.bld-off, a.auto-on, a.auto-off) {
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+}
+
+#game .btn.modern .btnContent:has(a.bld-on, a.bld-off, a.auto-on, a.auto-off) .btnTitle {
+	order: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+#game .btn.modern .btnContent:has(a.bld-on, a.bld-off, a.auto-on, a.auto-off) .btnTitle .label {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .btn.bldEnabled.modern div.btnContent,
 .btn.bldlackResConvert.modern div.btnContent{
     border-width: 0 0 0 8px;
