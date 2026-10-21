@@ -1,0 +1,27 @@
+/* ************************************************************* */
+/* ***        Modern UI 1.0.0 Theme - fork doddoreul          *** */
+/* ***                                                        *** */
+/* ***  Starts as a copy of the stock (default) look. Every    *** */
+/* ***  rule below is scoped to .scheme_modern-ui; add the     *** */
+/* ***  changes here, default.css stays the shared base.       *** */
+/* ************************************************************* */
+
+body.scheme_modern-ui {
+	--page-background-color: #FFFFFF;
+	--button-border-color: #888;
+	--text-color: black;
+	color-scheme: light;
+}
+
+/* default.css styles these only for the "default" scheme */
+.scheme_modern-ui .tabsContainer a.tab {
+	color: black;
+}
+
+.scheme_modern-ui .tabsContainer a.tab.activeTab {
+	color: #500000;
+}
+
+.scheme_modern-ui .upgrade-available {
+	color: green;
+}
