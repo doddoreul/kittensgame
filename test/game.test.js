@@ -1236,3 +1236,28 @@ test("Squad hp regen scales with max HP (baseline 0.1 with no leader)", () => {
     expect(map.getMaxHP()).toBe(20);
     expect(map.squad.hp).toBeCloseTo(10.1, 6); // single regen application per tick (duplicate idle regen removed)
 });
+test("Fauna cannot spawn in a biome with faunaPenalty 0 (home biome)", () => {
+    const homeBiome = game.village.getBiome("village");
+    expect(homeBiome.faunaPenalty).toBe(0);
+    for (var i = 0; i < 20; i++) { game.village.update(); }
+    expect(homeBiome.fauna && homeBiome.fauna.length).toBeFalsy();
+});
+
+test("Dead fauna stuck on an idle biome is reaped", () => {
+    const homeBiome = game.village.getBiome("village");
+    homeBiome.fauna = [{ title: "ghost", hp: 0 }];
+    game.village.update();
+    expect(homeBiome.fauna.length).toBe(0);
+});
+
+test("HQ upgrade model exposes manpower price", () => {
+    const controller = new classes.village.ui.map.UpgradeHQController(game);
+    const model = controller.fetchModel({ key: "upgradeHQ", name: "Upgrade HQ", prices: [{ name: "manpower", val: 250 }] });
+    controller.fetchExtendedModel(model);
+    expect(model.priceModels.length).toBe(1);
+    expect(model.priceModels[0].title).toContain("manpower"); // i18n stub resolves to $resources.manpower.title$ in test env
+    expect(model.priceModels[0].val).toBe(250);
+    game.village.map.hqLevel = 1;
+    const secondLvl = controller.getPrices(model);
+    expect(secondLvl[0].val).toBeCloseTo(312.5, 5);
+});

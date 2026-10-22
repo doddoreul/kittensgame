@@ -2197,14 +2197,19 @@ dojo.declare("classes.village.Map", null, {
 				this.game.globalEffectsCached["exploreRatio"] = (0.1 * ((biome.on || 0) - 1));
 			}
 
+			//reap fauna left dead outside of an active combat round (stale corpses keep showing as "0hp" in buttons)
+			if (biome.fauna && biome.fauna.length && biome.fauna[0].hp <= 0){
+				biome.fauna = [];
+			}
+
 			//todo: take it from the biome
 			var faunaNames = biome.faunaNames || this.defaultFaunaNames;
 			var faunaName = faunaNames[this.game.rand(faunaNames.length)];
 
-			//5% of chance to spawn enemy per tick
+			//5% of chance to spawn enemy per tick (faunaPenalty 0 on some biomes means no spawn at all)
 			if (!biome.fauna || !biome.fauna.length){
-				var spawnChance = 1000 * (biome.faunaPenalty || 1.0);
-				if (this.game.rand(10000) <= spawnChance){
+				var spawnChance = 1000 * (biome.faunaPenalty !== undefined ? biome.faunaPenalty : 1.0);
+				if (spawnChance > 0 && this.game.rand(10000) <= spawnChance){
 					biome.fauna = [this.createFauna(biome, faunaName)];
 				}
 			}
