@@ -1234,6 +1234,5 @@ test("Squad hp regen scales with max HP (baseline 0.1 with no leader)", () => {
     map.energy = 100;
     game.village.update();
     expect(map.getMaxHP()).toBe(20);
-    // idle regen is applied twice per tick (the "always regenerate" branch AND the idle branch) - pre-existing upstream behaviour, left untouched
-    expect(map.squad.hp).toBeCloseTo(10.2, 6);
+    expect(map.squad.hp).toBeCloseTo(10.1, 6); // single regen application per tick (duplicate idle regen removed)
 });

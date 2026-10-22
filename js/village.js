@@ -2227,12 +2227,11 @@ dojo.declare("classes.village.Map", null, {
 			if (this.energy < this.getMaxEnergy()) {
 				this.energy += 0.5;
 			}
-			
+
 			//cap eneergy and hp
 			if (this.energy > this.getMaxEnergy()) {
 				this.energy = this.getMaxEnergy();
 			}
-			this.squad.hp += 0.1 * this.getMaxHP() / 20;	//baseline 0.1 at maxHP 20, scales with leader HP
 		}
 
 		if (this.squad.hp > this.getMaxHP()) {
