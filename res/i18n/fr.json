@@ -2612,5 +2612,25 @@
     "workshop.zebraUpgrade.whispers.desc": "Débloque les rituels d'ascension d'alicorne aux Temples d'ivoire. L'ascension d'alicorne produit du T-Mythril et augmente la production minérale.",
     "workshop.zebraUpgrade.zebraTrappers.label": "Piégeurs zèbres",
     "workshop.zebraUpgrade.zebraTrappers.desc": "Les zèbres installent des pièges pour mieux se préparer aux chasses",
-    "workshop.zebraUpgradesPanel.label": "Améliorations zèbres"
+    "workshop.zebraUpgradesPanel.label": "Améliorations zèbres",
+    "village.map.msg.knocked": "L'escouade d'expédition a été mise à terre",
+    "village.map.msg.kill": "Vous avez tué {0}, +{1}xp",
+    "village.map.msg.brought": "Vos éclaireurs ont rapporté {0} {1}",
+    "village.map.panel.title": "Carte",
+    "village.map.panel.maps": "Cartes",
+    "village.map.panel.currentMap": "Carte actuelle : ",
+    "village.map.panel.biomes": "Biomes",
+    "village.map.panel.team": "Éclaireurs : Vivres []",
+    "village.map.panel.hp": "PV",
+    "village.map.panel.stamina": "Endurance",
+    "village.map.panel.cancel": "[Annuler]",
+    "village.map.panel.exploring": "En cours d'exploration : [{0}], ",
+    "village.map.panel.eta": "ETA : ",
+    "village.map.panel.lvl": "Niv.",
+    "village.map.panel.exp": "XP",
+    "village.map.tooltip.noCombat": "Vous n'êtes pas en combat",
+    "village.map.tooltip.hitChance": "Chances de touche : ",
+    "village.map.tooltip.dodgeChance": "Chances d'esquive : "
+,
+    "village.map.panel.explorers": "Éclaireurs"
 }

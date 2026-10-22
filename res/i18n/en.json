@@ -2688,6 +2688,25 @@
     "workshop.zebraUpgrade.whispers.desc": "Unlock Alicorn Ascension rituals at Ivory Temples. Alicorn Ascension produces T-Mythril and increases mineral production.",
 	"workshop.zebraUpgrade.zebraTrappers.label": "zebraTrappers",
 	"workshop.zebraUpgrade.zebraTrappers.desc": "Zebras set up traps, preparing better for the hunts",
-    "workshop.zebraUpgradesPanel.label": "Zebra Upgrades"
-    
+    "workshop.zebraUpgradesPanel.label": "Zebra Upgrades",
+    "village.map.msg.knocked": "Expedition squad have been knocked out",
+    "village.map.msg.kill": "You have killed {0}, +{1}xp",
+    "village.map.msg.brought": "Your explorers have brought {0} {1}",
+    "village.map.panel.title": "Map",
+    "village.map.panel.maps": "Maps",
+    "village.map.panel.currentMap": "Current map: ",
+    "village.map.panel.biomes": "Biomes",
+    "village.map.panel.team": "Explorers: Supplies []",
+    "village.map.panel.hp": "HP",
+    "village.map.panel.stamina": "Stamina",
+    "village.map.panel.cancel": "[Cancel]",
+    "village.map.panel.exploring": "Currently exploring: [{0}], ",
+    "village.map.panel.eta": "ETA: ",
+    "village.map.panel.lvl": "Lvl",
+    "village.map.panel.exp": "Exp",
+    "village.map.tooltip.noCombat": "You are currently not in combat",
+    "village.map.tooltip.hitChance": "Hit chance: ",
+    "village.map.tooltip.dodgeChance": "Dodge chance: "
+,
+    "village.map.panel.explorers": "Explorers"
 }

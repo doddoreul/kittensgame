@@ -2217,7 +2217,7 @@ dojo.declare("classes.village.Map", null, {
 		}
 		//always regenerate HP slowly
 		if (this.squad.hp < this.getMaxHP()) {
-			this.squad.hp += 0.1;
+			this.squad.hp += 0.1 * this.getMaxHP() / 20;
 		}
 
 		//only regenerate stamina outside of the combat
@@ -2232,7 +2232,7 @@ dojo.declare("classes.village.Map", null, {
 			if (this.energy > this.getMaxEnergy()) {
 				this.energy = this.getMaxEnergy();
 			}
-			this.squad.hp += 0.1;	//TODO: scale the hp regeneration proportionally to the max HP
+			this.squad.hp += 0.1 * this.getMaxHP() / 20;	//baseline 0.1 at maxHP 20, scales with leader HP
 		}
 
 		if (this.squad.hp > this.getMaxHP()) {
@@ -2340,7 +2340,7 @@ dojo.declare("classes.village.Map", null, {
 
 			if (this.squad.hp <= 0){
 				this.currentBiome = null;
-				this.game.msg("Expedition squad have been knocked out", "important", "explore");
+				this.game.msg($I("village.map.msg.knocked"), "important", "explore");
 			}
 			//return;	//do not explore further if obstacle encountered
 		}
@@ -2410,7 +2410,7 @@ dojo.declare("classes.village.Map", null, {
 				var fauna = killedFauna[i];
 				var playerLvl = this.game.village.getCombatLevel(leader.combatExp);
 				var newExp = this.getKillExp(playerLvl, this.squad.efficiency || 1.0, fauna.exp, fauna.level);
-				this.game.msg("You have killed " + fauna.title + ", +" + newExp + "xp", null, "combat");
+				this.game.msg($I("village.map.msg.kill", [fauna.title, newExp]), null, "combat");
 				leader.combatExp += newExp;
 				var newPlayerLvl = this.game.village.getCombatLevel(leader.combatExp);
 				if (newPlayerLvl > playerLvl) {
@@ -2604,7 +2604,7 @@ dojo.declare("classes.village.Map", null, {
 			if (amt > 0) {
 				var resPool = this.game.resPool.get(res);
 				var name = resPool.title || res;
-				var msg = "Your explorers have brought " + this.game.getDisplayValueExt(amt) + " " + name;
+				var msg = $I("village.map.msg.brought", [this.game.getDisplayValueExt(amt), name]);
 				var type = null;
 				if (res == "titanium" || res == "blueprint" || res == "relic"){
 					msg += "!";
@@ -3041,11 +3041,11 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 		}
 
 		if (unlockedMapCount > 0) {
-		var _div = dojo.create("div", {innerHTML: "Maps", style: { paddingBottom: "10px"} }, div);
+		var _div = dojo.create("div", {innerHTML: $I("village.map.panel.maps"), style: { paddingBottom: "10px"} }, div);
 		this.mapsDiv = dojo.create("div", null, _div);
 
 		var currentMap = map.getMap(map.activeMapId);
-		dojo.create("div", {innerHTML: "Current map: " + currentMap.name + "<br>" + currentMap.description }, this.mapsDiv);
+		dojo.create("div", {innerHTML: $I("village.map.panel.currentMap") + currentMap.name + "<br>" + currentMap.description }, this.mapsDiv);
 
 		//Map selector (map is an aggregation of biomes)
 		var mapSelect = dojo.create("select", {style: {float: "right"}}, this.mapsDiv);
@@ -3067,11 +3067,11 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 		});
 		}
 
-		dojo.create("div", {innerHTML: "Biomes", style: { paddingBottom: "10px"} }, div);
+		dojo.create("div", {innerHTML: $I("village.map.panel.biomes"), style: { paddingBottom: "10px"} }, div);
 
 
 		this.teamDiv = dojo.create("div", {
-			innerHTML: "Explorers: Supplies []"
+			innerHTML: $I("village.map.panel.team")
 		}, div);
 
 		this.explorerDiv = dojo.create("div", {style:{display:"flex", width:"100%"}}, div);
@@ -3080,10 +3080,10 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 		var explorerEff = Math.floor(map.energy / map.getMaxEnergy() * 100);
 		this.explorerLeftDiv = dojo.create("div", {
 			style:{width:"50%"},
-			innerHTML: "Explorers:<br>HP: " + this.game.getDisplayValueExt(map.squad.hp) + "/" + this.game.getDisplayValueExt(explorerMaxHp) +
+			innerHTML: $I("village.map.panel.explorers") + ":<br>" + $I("village.map.panel.hp") + ": " + this.game.getDisplayValueExt(map.squad.hp) + "/" + this.game.getDisplayValueExt(explorerMaxHp) +
 				"<div style='width:100%;height:4px;background:#333;margin-top:2px;'>" +
 				"<div style='width:" + (explorerHpRatio * 100).toFixed(0) + "%;height:100%;background:#4a4;'></div></div>" +
-				"<br>Stamina: " + map.energy.toFixed(0) + "/" + map.getMaxEnergy().toFixed(0) + " [eff:" + explorerEff + "%]" +
+				"<br>" + $I("village.map.panel.stamina") + ": " + map.energy.toFixed(0) + "/" + map.getMaxEnergy().toFixed(0) + " [eff:" + explorerEff + "%]" +
 				"<br>ATK: " + map.squad.atk.toFixed(0) + " | DEF: " + map.squad.def.toFixed(0) + " | AGI: " + map.squad.agi.toFixed(0) + " | STR: " + map.squad.str.toFixed(0)
 				// + " | SPD: " + map.squad.spd.toFixed(0)
 
@@ -3091,12 +3091,12 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 
 		UIUtils.attachTooltip(this.game, this.explorerLeftDiv, 0, 150, dojo.hitch(this, function(){
 			var biome = map.currentBiome ? self.game.village.getBiome(map.currentBiome) : null;
-			var tooltipContent = "You are currently not in combat";
+			var tooltipContent = $I("village.map.tooltip.noCombat");
 			if (biome && biome.fauna && biome.fauna.length){
 				var fauna =  biome.fauna[0];
 				var hitRate = map.getHitRate(map.squad, fauna);
 				var dodgeRate = 100 - map.getHitRate(fauna, map.squad);
-				var tooltipContent = "Hit chance: " + hitRate.toFixed(0) + "%<br>" + "Dodge chance: " + dodgeRate.toFixed(0) + "%";
+				var tooltipContent = $I("village.map.tooltip.hitChance") + hitRate.toFixed(0) + "%<br>" + $I("village.map.tooltip.dodgeChance") + dodgeRate.toFixed(0) + "%";
 			}
 			return tooltipContent;
 		}));
@@ -3111,7 +3111,7 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 		this.explorationDiv = dojo.create("div", null, div);
 		this.cancelExplorationLink = dojo.create("a", {
 			href: "#",
-			innerHTML: "[Cancel]"
+			innerHTML: $I("village.map.panel.cancel")
 		}, div);
 		dojo.connect(this.cancelExplorationLink, "onclick", this, this.cancelExploration);
 
@@ -3139,9 +3139,9 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 
 			var cpPerTick = this.game.village.map.getCPPerTick(biome);
 			var etaSeconds = cpRemaining / (cpPerTick * this.game.getTicksPerSecondUI());
-			etaText = ", ETA: " + this.game.toDisplaySeconds(etaSeconds);
+			etaText = ", " + $I("village.map.panel.eta") +this.game.toDisplaySeconds(etaSeconds);
 
-			this.explorationDiv.innerHTML = "Currently exploring: [" + biome.title + "], " +
+			this.explorationDiv.innerHTML = $I("village.map.panel.exploring", [biome.title]) +
 			(biome.cp / toLevel * 100).toFixed(0) +
 			"%" + etaText;	
 			
@@ -3164,17 +3164,17 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 		if (leader) {
 			var combatLvl = this.game.village.getCombatLevel(leader.combatExp);
 			var progress = this.game.village.getCombatExpProgress(leader.combatExp);
-			this.leaderDiv.innerHTML = "<span>" + $I("village.census.lbl.leader") + ":</span> " + this.game.village.getStyledName(leader, true) + ", <span>Lvl</span> " + combatLvl + 
-			", Exp: " + this.game.getDisplayValueExt(progress.current) + "/" + this.game.getDisplayValueExt(progress.total) + "";
+			this.leaderDiv.innerHTML = "<span>" + $I("village.census.lbl.leader") + ":</span> " + this.game.village.getStyledName(leader, true) + ", <span>" + $I("village.map.panel.lvl") + "</span> " + combatLvl + 
+			", " + $I("village.map.panel.exp") + ": " + this.game.getDisplayValueExt(progress.current) + "/" + this.game.getDisplayValueExt(progress.total) + "";
 		} else {
 			this.leaderDiv.innerHTML = "<span>" + $I("village.census.lbl.leader") + ":</span> " + $I("village.census.lbl.noLeader");
 		}
-		this.explorerLeftDiv.innerHTML = "Explorers:<br>HP: " + hpInfo + "/" + map.getMaxHP().toFixed(0) +
+		this.explorerLeftDiv.innerHTML = $I("village.map.panel.explorers") + ":<br>" + $I("village.map.panel.hp") + ": " + hpInfo + "/" + map.getMaxHP().toFixed(0) +
 			"<div style='width:100%;height:4px;background:#333;margin-top:2px;'>" +
 			"<div style='width:" + (Math.max(0, Math.min(1, map.squad.hp / map.getMaxHP())) * 100).toFixed(0) + "%;height:100%;background:#4a4;'></div></div>" +
 			"<br>ATK: " + map.squad.atk.toFixed(0) + " | DEF: " + map.squad.def.toFixed(0) + " | AGI: " + map.squad.agi.toFixed(0) + " | STR: " + map.squad.str.toFixed(0) +
 			//" | SPD: " + map.squad.spd.toFixed(0) +
-			"<br>Stamina: " + map.energy.toFixed(0) + "/" + map.getMaxEnergy().toFixed(0) + " [eff:" + (efficiency * 100).toFixed() + "%]";
+			"<br>" + $I("village.map.panel.stamina") + ": " + map.energy.toFixed(0) + "/" + map.getMaxEnergy().toFixed(0) + " [eff:" + (efficiency * 100).toFixed() + "%]";
 		this.explorerRightDiv.innerHTML = "";
 		if (biome && biome.fauna && biome.fauna.length){
 			var fauna =  biome.fauna[0];
@@ -3185,7 +3185,7 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 			}
 			var faunaMaxHp = fauna.maxHp || fauna.hp;
 			var faunaHpRatio = Math.max(0, Math.min(1, fauna.hp / faunaMaxHp));
-			this.explorerRightDiv.innerHTML = fauna.title + " lvl." + fauna.level + "<br>HP: " + hpInfo + "/" + this.game.getDisplayValueExt(faunaMaxHp) +
+			this.explorerRightDiv.innerHTML = fauna.title + " " + $I("village.map.panel.lvl") + "." + fauna.level + "<br>" + $I("village.map.panel.hp") + ": " + hpInfo + "/" + this.game.getDisplayValueExt(faunaMaxHp) +
 				"<div style='width:100%;height:4px;background:#333;margin-top:2px;'>" +
 				"<div style='width:" + (faunaHpRatio * 100).toFixed(0) + "%;height:100%;background:#a44;'></div></div>" +
 				"<br>ATK: " + fauna.atk.toFixed(0) + " | DEF: " + fauna.def.toFixed(0) + " | AGI: " + fauna.agi.toFixed(0) + " | STR: " + fauna.str.toFixed(0) + " | SPD: " + fauna.spd.toFixed(0);
@@ -5820,7 +5820,7 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.Village", com.nuclearunicorn.game.u
 
 
 		//TOOD: make all panels IChildAware?
-		this.mapPanel = new com.nuclearunicorn.game.ui.Panel("Map", this.game.village);
+		this.mapPanel = new com.nuclearunicorn.game.ui.Panel($I("village.map.panel.title"), this.game.village);
 		this.mapPanel.setVisible(isMapVisible);
 
 		var mapPanelContainer = this.mapPanel.render(tabContainer);
