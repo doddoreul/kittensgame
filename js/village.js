@@ -2969,6 +2969,18 @@ dojo.declare("classes.ui.village.BiomeBtn", com.nuclearunicorn.game.ui.ButtonMod
 				dojo.style(desc, "borderBottom", "1px solid gray");
 			}
 
+			//exploration price: manpower drained per day while levels are active (the +/- toggles themselves are free)
+			var game = model.options.controller.game;
+			var map = game.village.map;
+			dojo.create("div", {
+				className: "desc small",
+				innerHTML: $I("village.map.tooltip.exploreCost") + game.getDisplayValueExt(map.getExplorationCost() * 10) + " " + game.resPool.get("manpower").title + "/day"
+			}, tooltip);
+			dojo.create("div", {
+				className: "desc small",
+				innerHTML: $I("village.map.tooltip.freeToggles")
+			}, tooltip);
+
 			if (biomeMeta.fauna){
 				for (var i in biomeMeta.fauna){
 					var fauna = biomeMeta.fauna[i];

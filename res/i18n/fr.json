@@ -2632,6 +2632,9 @@
     "village.map.tooltip.hitChance": "Chances de touche : ",
     "village.map.tooltip.dodgeChance": "Chances d'esquive : "
 ,
+    "village.map.tooltip.exploreCost": "Coût d'exploration : ",
+    "village.map.tooltip.freeToggles": "+ / − sont gratuits"
+,
     "village.map.panel.explorers": "Éclaireurs"
 ,
     "village.map.msg.returned": "Vos éclaireurs sont rentrés d'expédition"

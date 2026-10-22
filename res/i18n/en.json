@@ -2708,6 +2708,9 @@
     "village.map.tooltip.hitChance": "Hit chance: ",
     "village.map.tooltip.dodgeChance": "Dodge chance: "
 ,
+    "village.map.tooltip.exploreCost": "Exploration drains: ",
+    "village.map.tooltip.freeToggles": "+/- levels are free"
+,
     "village.map.panel.explorers": "Explorers"
 ,
     "village.map.msg.returned": "Your explorers have returned from expedition"
