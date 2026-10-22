@@ -4710,11 +4710,11 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButton", com.nuclearunicorn.game.ui.
 		var self = this;
 		this.maxLinkEls = [];
 		var maxLinks = [
-			{ id: "assignAll", title: "+ max", handler: function(btn, callback){
+			{ id: "assignAll", title: "+ max", cssClass: "jobLink jobLink-assignAll", handler: function(btn, callback){
 				self.controller.assignAllJobs(self.model);
 				callback(true);
 			}},
-			{ id: "unassignAll", title: "- max", handler: function(btn, callback){
+			{ id: "unassignAll", title: "- max", cssClass: "jobLink jobLink-unassignAll", handler: function(btn, callback){
 				self.controller.unassignAllJobs(self.model);
 				callback(true);
 			}}
@@ -4725,6 +4725,13 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButton", com.nuclearunicorn.game.ui.
 			this.maxLinkEls.push(link);
 		}
 		this.maxLinksShown = false;
+		if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches){
+			//no hover on a touch screen: the "max" links stay next to the others
+			for (var k = 0; k < this.maxLinkEls.length; k++) {
+				this.maxLinkEls[k].style.display = "";
+			}
+			return;
+		}
 		dojo.connect(this.domNode, "onmousemove", function(event){
 			self.showMaxLinks(event.shiftKey);
 		});

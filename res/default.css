@@ -3,12 +3,65 @@ html, body {
     overflow-y: hidden;
 }
 
+/* ==============================================================
+   THE SHARED VOCABULARY
+   Every rule in this file paints with the tokens below, so a theme
+   only has to say which color plays which role. The values are the
+   ones the pages used to hard-code: nothing moves until a theme
+   says otherwise.
+
+   A theme (res/theme_<name>.css) sets them on its own class:
+       body.scheme_<name> { --surface-color: ...; }
+
+   Two tiers are welcome: the theme keeps its own palette in private
+   variables and maps them onto the roles, e.g. theme_modern-2026:
+       --m26-surface: #1c2036;          (the palette)
+       --surface-color: var(--m26-surface);   (the role)
+   ============================================================== */
 :root {
     /** Background color for body, page, panels and most elements **/
     --page-background-color: #FFFFFF;
     --button-border-color:#888;
     /** General text color on the page (buttons, tooltips, etc) */
     --text-color: black;
+
+    /** 1px separator between panels, buttons and groups */
+    --border-color: gray;
+    /** the light surface behind buttons, menus and tooltips */
+    --surface-color: #f7f8fa;
+    /** the surface of a hovered button or link */
+    --surface-hover-color: #f1f3f7;
+    /** secondary text (descriptions, hints) on the light surfaces */
+    --text-subtle-color: #55585f;
+    /** the panel of the log, on the page */
+    --log-background-color: rgba(247, 248, 250, 0.6);
+    /** the action links inside a button */
+    --link-color: #555;
+    --link-background-color: #EEE;
+    /** corner radii */
+    --radius-md: 12px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+    /** the shadow of the floating layers (dialogs, tooltips) */
+    --shadow-floating: 0 10px 40px -20px rgba(15, 23, 42, 0.8);
+    /** the keyboard focus ring */
+    --focus-ring-color: #4a90d9;
+
+    /* --- the type roles ------------------------------------------------------
+       One family for the whole interface, three sizes, one weight. The game is a
+       dense surface: the labels stay small and the reading surfaces (the log,
+       the tooltips, the dialogs) carry the body size. The family is the system
+       one, so nothing is downloaded and nothing reflows while loading. */
+    --font-family-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-family-mono: "Lucida Console", Monaco, monospace;
+    /** the reading size: the log, the tooltips, the dialogs */
+    --font-size-body: 15px;
+    /** the size of the labels: the buttons, the menus */
+    --font-size-label: 14px;
+    /** the size of the hints, the chips and the small caps labels */
+    --font-size-meta: 12px;
+    --font-weight-strong: 600;
+    --line-height-body: 1.45;
 }
 
 body {
@@ -17,6 +70,12 @@ body {
     background-color: var(--page-background-color);
     color: var(--text-color);
     height: 100vh;
+    /* the interface was rendered in the browser default (a serif) outside of the
+       buttons: one family for everything */
+    font-family: var(--font-family-ui);
+    /* notches and home indicators: keep the page clear of them */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
 img.loader {
@@ -34,7 +93,7 @@ img.loader {
 
     overflow: auto;
     width: 1300px;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
 }
 
 #topBar {
@@ -43,13 +102,13 @@ img.loader {
     left: 0px;
     height: 26px;
     width: 100%;
-    border-bottom: 1px solid var(--border-color, #c9ced6);
+    border-bottom: 1px solid var(--border-color);
 
     box-shadow: none;
     min-width: 1180px;
 
     display: flex;
-    border-radius: 12px 12px 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
     justify-content: space-between;
     white-space: nowrap;
@@ -108,8 +167,6 @@ img.loader {
     overflow-y: auto;
     overflow-x: hidden;
 
-    padding-top:20px;
-
     height: calc(100% - 20px);
     min-height: calc(100% - 20px);
 }
@@ -126,6 +183,7 @@ img.loader {
     max-width: 280px;
     vertical-align: top;
     padding-left: 8px;
+    padding-top: 10px;
     top: 20px;
     position: relative;
 }
@@ -140,10 +198,14 @@ img.loader {
 
 div#gameLog {
     overflow-y: auto !important;
-    border: 1px solid var(--border-color, #c9ced6);
-    border-radius: 12px;
-    background: rgba(247, 248, 250, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--log-background-color);
     padding: 6px 8px;
+    /* the log is the longest text of the game: it gets the body size and the
+       body leading */
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
 }
 
 #footerLinks {
@@ -169,7 +231,7 @@ div#gameLog {
 
 .scheme_default .tabsContainer a.tab {
     color: black;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
 }
 
 .scheme_default .tabsContainer a.tab.activeTab {
@@ -262,7 +324,7 @@ select>option {
 }
 
 .btn .btnContent .small {
-    font-size: 0.7em;
+    font-size: var(--font-size-meta);
     line-height: 16px;
 }
 
@@ -290,6 +352,14 @@ select>option {
     text-overflow: ellipsis;
 }
 
+/* The label of a button is one line: the ellipsis above only works that way, and
+   the #game * reset further down would otherwise put the text back on two lines
+   and make the buttons grow. */
+#game .btn .btnContent .btnTitle .label,
+#game .btn .btnContent .btnTitle .label-content {
+    white-space: nowrap;
+}
+
 .rawRes {
     color: gray;
 }
@@ -300,7 +370,7 @@ select>option {
 }
 
 .spacer {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 12px;
 }
 
@@ -310,15 +380,15 @@ select>option {
 
 .dialog {
     position: absolute;
-    border: 1px solid var(--border-color, black);
-    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
 
     left: 50%;
     top: 50%;
 
     background-color: var(--page-background-color);
     padding: 20px;
-    box-shadow: 0 10px 40px -20px rgba(15, 23, 42, 0.8);
+    box-shadow: var(--shadow-floating);
 }
 
 .help {
@@ -360,10 +430,10 @@ select>option {
 }
 
 .panelContainer {
-    border: 1px solid var(--border-color, #c9ced6);
+    border: 1px solid var(--border-color);
     min-height: 30px;
     margin-top: 8px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
 }
 
 .panelContainer .title {
@@ -397,7 +467,7 @@ select > option:disabled {
     margin-bottom: 10px;
     padding: 5px;
     padding-left: 10px;
-    border: 1px solid gray;
+    border: 1px solid var(--border-color);
 }
 
 .achievement.badge {
@@ -442,11 +512,11 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 
 #tooltip {
     position: absolute !important;
-    border: 1px solid var(--border-color, #c9ced6);
+    border: 1px solid var(--border-color);
     padding: 5px;
     pointer-events: none;
     box-shadow: none;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
 }
 
 /* Wrapper for plain-text option tooltips (e.g. the "(?)" hints in the options
@@ -471,7 +541,7 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 .tooltip-divider {
     text-align: center;
     width: 100%;
-    border-bottom: "1px solid gray";
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: "4px";
 }
 
@@ -518,25 +588,25 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 
 .bldGroupContainer {
     padding-top: 15px;
-    border-top: 1px solid gray;
+    border-top: 1px solid var(--border-color);
     margin-top: 10px;
     height: 100%;
 }
 
 .btn.modern {
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    border-radius: 10px;
-    border: 1px solid var(--button-border-color, #c9ced6);
+    font-family: var(--font-family-ui);
+    font-size: var(--font-size-label);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--button-border-color);
     padding: 0;
     width: 264px;
-    background: #f7f8fa;
-    transition: background 120ms ease, border-color 120ms ease;
+    background: var(--surface-color);
+    transition: background 140ms ease, border-color 140ms ease;
 }
 
 .btn.modern:hover {
-    border-color: #9aa3b2;
-    background: #eef0f4;
+    border-color: #8b8f9a;
+    background: var(--surface-hover-color);
 }
 
 .btn.modern.disabled {
@@ -553,9 +623,9 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 }
 
 .btn.modern a {
-    color: #555;
-    background-color: #EEE;
-    border-left: 1px solid #888;
+    color: var(--link-color);
+    background-color: var(--link-background-color);
+    border-left: 1px solid var(--button-border-color);
     padding: 10px 6px 10px 6px !important;
     margin: -10px 0;
     min-width: 20px;
@@ -564,7 +634,7 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 
 .btn.modern a.enabled {
     color: initial;
-	font-weight: bold;
+	font-weight: var(--font-weight-strong);
 }
 
 /* the sell / on-off / automation links do not fit next to the label in a 264px
@@ -587,7 +657,6 @@ td.resLimitWarn, .res-cell.resLimitWarn  {
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 .btn.bldEnabled.modern div.btnContent,
@@ -661,7 +730,7 @@ table.craftTable tr:hover td {
 }
 
 .toolbarIcon .pollutionText {
-    padding-left: 17px;    
+    padding-left: 17px;
 }
 
 .toolbarIcon .happinessText {
@@ -720,7 +789,7 @@ table.craftTable tr:hover td {
 
 .login-popup .last-backup {
     margin-bottom: 10px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .login-popup .error {
@@ -1090,9 +1159,9 @@ a:hover {
 /*------------------------------*/
 .tooltip-inner {
     width: 280px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, #c9ced6);
-    background: #f7f8fa;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
     color: var(--text-color);
     box-shadow: none;
 }
@@ -1102,8 +1171,9 @@ a:hover {
     text-align: center;
     width: 100%;
     padding-top: 4px;
-    font-size: 15px;
-    color: gray;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: var(--text-subtle-color);
 }
 
 .tooltip-inner .desc.small {
@@ -1117,7 +1187,7 @@ a:hover {
     padding-right: 2px;
 }
 
-#topBar .links-block a { 
+#topBar .links-block a {
     padding-left: 4px;
     padding-right: 4px;
 }
@@ -1361,7 +1431,7 @@ a.link.collapse:hover {
 .desc > .upgrade-available {
 	padding-bottom: 4px;
 	margin-bottom: 4px;
-	border-bottom: 1px solid gray;
+	border-bottom: 1px solid var(--border-color);
 	font-weight: bold;
 }
 .scheme_default .upgrade-available {
@@ -1380,7 +1450,7 @@ a.link.collapse:hover {
 	font-weight: bold;
 }
 .census-block {
-    border: 1px solid gray;
+    border: 1px solid var(--border-color);
 	margin-bottom: 5px;
 	padding: 5px;
 	min-height: 80px;
@@ -1439,23 +1509,23 @@ a.link.collapse:hover {
 	border: 1px solid transparent;
 }
 .name.variety-dual { /* bicolore */
-	border: 1px solid grey;
+	border: 1px solid var(--border-color);
 }
 .name.variety-tabby { /* tigré  ou rayé */
-	border: 1px dashed grey;
+	border: 1px dashed var(--border-color);
 }
 .name.variety-torbie { /* marbré strié */
-	border: 1px dashed grey;
+	border: 1px dashed var(--border-color);
 	border-left: dotted;
 	border-right: dotted;
 }
 .name.variety-calico { /* tricolore */
-	border: 1px solid grey;
+	border: 1px solid var(--border-color);
 	border-top-color: saddlebrown;
 	border-bottom-color: peru;
 }
 .name.variety-spots { /* tacheté */
-	border: 1px dotted grey;
+	border: 1px dotted var(--border-color);
 }
 
 /*--------------------------------------
@@ -1607,7 +1677,7 @@ div.pray {
 }
 
 div.leet {
-    font-family: "Lucida Console", Monaco, monospace !important;
+    font-family: var(--font-family-mono) !important;
     text-align: right                                !important;
     color: #33FF00                                   !important;
     background-color: #282828                        !important;
@@ -1636,7 +1706,7 @@ div.nice {
 }
 
 div.notfound {
-    font-family: "Lucida Console", Monaco, monospace !important;
+    font-family: var(--font-family-mono) !important;
     color: #8C8C8C                                   !important;
     text-decoration: line-through                    !important;
     opacity: 0.6                                     !important;
@@ -2136,7 +2206,7 @@ span.genericWarning {
     white-space: nowrap;
     overflow: hidden;
 
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--border-color);
     background: rgba(127, 127, 127, 0.15);
 }
 
@@ -2195,12 +2265,12 @@ body.preview-mode .btn.small-text span {
    this restores a visible ring for keyboard users only.
    shortcut: :focus-visible is ignored by legacy IE, those fall back to the UA focus ring; drop this note when the IE support goal goes */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
-    outline: 2px solid #4a90d9 !important;
+    outline: 2px solid var(--focus-ring-color) !important;
     outline-offset: 2px;
 }
 
 .dialog input[type="button"]:focus-visible {
-    outline: 2px solid #4a90d9 !important;
+    outline: 2px solid var(--focus-ring-color) !important;
     outline-offset: 2px;
 }
 
@@ -2331,6 +2401,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     #game #midColumn .bldGroupContainer .btn,
     #game #midColumn .bldGroupContainer .btn.modern { width: auto; }
 
+    /* the job and craft buttons get the whole width of the pane: the label and
+       the links both need the room on a phone */
+    #game #midColumn .btn.modern { width: auto; }
+
     /* the save boxes are fixed 550px inline; they have to fit the sheet */
     .dialog textarea { width: 100% !important; box-sizing: border-box; }
 
@@ -2353,4 +2427,49 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     #game #clearLogHref { display: inline-block; padding: 8px 6px; }
     #gamePageContainer #topBar a { display: inline-block; min-width: 28px; padding: 8px 4px; text-align: center; }
     .dialog input[type="button"] { min-height: 44px; min-width: 44px; }
+
+    /* the links inside the buttons are the real controls: they need a thumb too
+       (44px tall, and no wider than needed: the job links share one line) */
+    #game .btn.modern a { padding: 14px 6px !important; }
+
+    /* the job buttons carry six links (minus, plus, by five, by max): on a phone
+       the label takes its own row and the links the next one, so none of them
+       has to share a 264px line */
+    #game .btnContent:has(a.jobLink) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    #game .btnContent:has(a.jobLink) .btnTitle {
+        flex: 1 0 100%;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    #game .btnContent:has(a.jobLink) a {
+        flex: 0 0 auto;
+        margin: 0;
+    }
+
+    #game .btnContent:has(a.jobLink) a.unassignLink { order: 1; }
+    #game .btnContent:has(a.jobLink) a.unassign5Link { order: 2; }
+    #game .btnContent:has(a.jobLink) a.assignLink { order: 3; }
+    #game .btnContent:has(a.jobLink) a.assign5Link { order: 4; }
+    #game .btnContent:has(a.jobLink) a.jobLink-unassignAll { order: 5; }
+    #game .btnContent:has(a.jobLink) a.jobLink-assignAll { order: 6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* the states keep changing, they just stop moving: the fades become instant
+       and the loops (the pulse, the season rainbows) stop */
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+    }
+
+    /* the new-message highlight was a colour pulse: it becomes a static mark */
+    .freshMessage { color: #FF4136; }
 }

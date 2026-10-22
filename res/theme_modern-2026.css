@@ -1,67 +1,95 @@
 /*
 	Kittens Game - Modern 2026 UI
-	Text-only, no generated images/icons
+	Text-only, no generated images/icons. Bolder flat redesign.
+
+	Two tiers: the --m26-* values are this theme's palette (primitives), the
+	shared names below map them to the roles default.css consumes (semantics).
+	Any theme can override the shared names the same way.
 */
 
 .scheme_modern-2026 {
+	/* --- palette (primitives) --- */
 	--m26-bg: #0b1026;
-	--m26-panel: #101626;
-	--m26-surface: #151b2f;
-	--m26-border: rgba(148, 163, 184, 0.25);
-	--m26-text: #e6e8ee;
-	--m26-text-subtle: #b7bdd6;
-	--m26-accent: #9aa3ff;
-	--m26-accent-2: #22d3ee;
-	--m26-hover: rgba(154, 163, 255, 0.16);
-	--m26-active: rgba(34, 211, 238, 0.18);
-	--m26-res-low: #f87171;
-	--m26-res-ok: #34d399;
+	--m26-page: radial-gradient(1400px 900px at 50% 0%, rgba(139, 155, 255, 0.14), transparent 60%),
+		radial-gradient(1000px 800px at 80% 120%, rgba(56, 189, 248, 0.1), transparent 65%),
+		#0b1026;
+	--m26-panel: #15182a;
+	--m26-surface: #1c2036;
+	--m26-surface-2: #23273f;
+	--m26-border: rgba(148, 163, 184, 0.22);
+	--m26-border-strong: rgba(139, 155, 255, 0.5);
+	--m26-text: #f8fafc;
+	--m26-text-subtle: #cbd5e1;
+	--m26-text-dim: #94a3b8;
+	--m26-accent: #8b9bff;
+	--m26-accent-2: #38bdf8;
+	--m26-hover: rgba(139, 155, 255, 0.18);
+	--m26-active: rgba(56, 189, 248, 0.22);
+	--m26-ok: #22c55e;
+	--m26-warn: #f59e0b;
+	--m26-bad: #f87171;
+
+	/* --- roles (semantics) --- */
+	--page-background-color: var(--m26-bg);
+	--text-color: var(--m26-text);
+	--button-border-color: var(--m26-border);
+	--border-color: var(--m26-border);
+	--surface-color: var(--m26-surface);
+	--surface-hover-color: var(--m26-surface-2);
+	--text-subtle-color: var(--m26-text-dim);
+	--link-color: var(--m26-text-dim);
+	--link-background-color: transparent;
+	--shadow-floating: none;
+	--focus-ring-color: var(--m26-accent-2);
 }
 
-/* page */
-.scheme_modern-2026 body,
+/* base */
+.scheme_modern-2026 body {
+	background: var(--m26-page);
+	color: var(--text-color);
+}
+
 .scheme_modern-2026 #gamePageContainer {
-	background: radial-gradient(1200px 800px at 20% 0%, rgba(154, 163, 255, 0.08), transparent 60%),
-		radial-gradient(900px 700px at 80% 100%, rgba(34, 211, 238, 0.06), transparent 60%),
-		var(--m26-bg);
-	color: var(--m26-text);
+	background: transparent;
+	color: var(--text-color);
 }
 
 .scheme_modern-2026 #game {
-	color: var(--m26-text);
+	color: var(--text-color);
+	letter-spacing: 0.01em;
 }
 
 /* columns */
 .scheme_modern-2026 .column {
-	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%);
+	background: transparent;
+	gap: 10px;
 }
 
 .scheme_modern-2026 #leftColumn,
 .scheme_modern-2026 #midColumn,
 .scheme_modern-2026 #rightColumn {
-	background: var(--m26-panel);
-	border: 1px solid var(--m26-border);
-	border-radius: 12px;
-	box-shadow: 0 20px 60px -40px rgba(154, 163, 255, 0.6);
-	backdrop-filter: blur(2px);
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--m26-panel);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-lg);
+	box-shadow: 0 60px 120px -80px rgba(139, 155, 255, 0.45);
+	padding: 12px 12px 14px;
 }
 
-.scheme_modern-2026 #leftColumn { padding: 12px 12px 10px; }
-.scheme_modern-2026 #midColumn { padding: 10px 10px 12px; }
-.scheme_modern-2026 #rightColumn { padding: 10px 12px 12px; }
-
-/* topbar */
+/* top bar */
 .scheme_modern-2026 #gamePageContainer #topBar {
-	background: linear-gradient(90deg, rgba(154, 163, 255, 0.12) 0%, rgba(21, 27, 47, 0.9) 40%, rgba(21, 27, 47, 0.9) 100%);
-	border: 1px solid var(--m26-border);
-	border-radius: 999px;
-	color: var(--m26-text);
-	box-shadow: 0 10px 40px -30px rgba(154, 163, 255, 0.8);
+	background: linear-gradient(90deg, rgba(139, 155, 255, 0.28) 0%, rgba(28, 32, 54, 0.98) 45%, rgba(28, 32, 54, 0.98) 100%);
+	border: 1px solid var(--m26-border-strong);
+	border-bottom: none;
+	border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+	box-shadow: none;
+	color: var(--text-color);
+	height: 28px;
 }
 
 .scheme_modern-2026 #topBar div,
 .scheme_modern-2026 #topBar a {
 	color: var(--m26-text-subtle);
+	text-decoration: none;
 }
 
 .scheme_modern-2026 #topBar a:hover {
@@ -70,18 +98,21 @@
 
 /* tabs */
 .scheme_modern-2026 .tabsContainer {
-	padding: 6px 8px;
-	border-radius: 999px;
-	background: rgba(21, 27, 47, 0.8);
-	border: 1px solid var(--m26-border);
+	background: var(--m26-surface);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-pill);
+	padding: 4px 6px;
+	gap: 4px;
 }
 
 .scheme_modern-2026 .tabsContainer a.tab {
-	color: var(--m26-text-subtle);
-	border-radius: 999px;
-	padding: 4px 10px;
-	text-decoration: none;
-	letter-spacing: 0.01em;
+	color: var(--m26-text-dim);
+	border-radius: var(--radius-pill);
+	padding: 5px 12px;
+	font-size: var(--font-size-meta);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	transition: color 120ms ease, background 120ms ease, box-shadow 120ms ease;
 }
 
 .scheme_modern-2026 .tabsContainer a.tab:hover {
@@ -91,104 +122,130 @@
 
 .scheme_modern-2026 .tabsContainer a.tab.activeTab {
 	color: var(--m26-text);
-	background: linear-gradient(90deg, rgba(154, 163, 255, 0.4) 0%, rgba(34, 211, 238, 0.25) 100%);
-	box-shadow: inset 0 0 0 1px rgba(154, 163, 255, 0.4);
+	background: radial-gradient(circle at top, rgba(139, 155, 255, 0.5), transparent 70%), linear-gradient(90deg, rgba(139, 155, 255, 0.42) 0%, rgba(56, 189, 248, 0.26) 100%);
+	box-shadow: inset 0 0 0 1px rgba(139, 155, 255, 0.6);
 }
 
 /* buttons */
 .scheme_modern-2026 .btn.modern {
 	width: 264px;
-	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%);
-	border: 1px solid var(--m26-border);
-	border-radius: 10px;
-	box-shadow: none;
-	color: var(--m26-text);
+	border-radius: var(--radius-md);
+	border: 1px solid var(--button-border-color);
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--surface-color);
+	color: var(--text-color);
+	font-family: var(--font-family-ui);
+	font-size: var(--font-size-label);
+	transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
 }
 
 .scheme_modern-2026 .btn.modern:hover {
-	border-color: rgba(154, 163, 255, 0.6);
-	background: linear-gradient(180deg, var(--m26-hover) 0%, transparent 100%);
+	border-color: var(--m26-border-strong);
+	background: linear-gradient(180deg, rgba(139, 155, 255, 0.16) 0%, transparent 100%), var(--surface-hover-color);
 }
 
 .scheme_modern-2026 .btn.modern:active {
-	border-color: rgba(34, 211, 238, 0.6);
-	background: linear-gradient(180deg, var(--m26-active) 0%, transparent 100%);
+	border-color: rgba(56, 189, 248, 0.7);
+	background: linear-gradient(180deg, rgba(56, 189, 248, 0.18) 0%, transparent 100%), var(--surface-hover-color);
 }
 
 .scheme_modern-2026 .btn.modern.disabled {
-	opacity: 0.45;
-	border-color: var(--m26-border);
+	opacity: 0.38;
+	border-color: var(--border-color);
 }
 
 .scheme_modern-2026 .btn.modern a {
-	color: var(--m26-text-subtle);
-	background: transparent;
-	border-left: 1px solid var(--m26-border);
+	color: var(--link-color);
+	background: var(--link-background-color);
+	border-left: 1px solid var(--border-color);
+	transition: color 120ms ease, background 120ms ease;
 }
 
 .scheme_modern-2026 .btn.modern a:hover {
-	color: var(--m26-text);
+	color: var(--text-color);
 	background: var(--m26-hover);
 }
 
 .scheme_modern-2026 .btn.modern a.enabled {
 	color: var(--m26-accent-2);
-	font-weight: 600;
+	font-weight: var(--font-weight-strong);
 }
 
-/* sell/disabled/automation text colors */
 .scheme_modern-2026 .btn.modern a.bld-off,
 .scheme_modern-2026 .btn.modern a.auto-off {
-	color: var(--m26-text-subtle);
+	color: var(--m26-text-dim);
 }
 
 .scheme_modern-2026 .btn.modern a.bld-on {
-	color: var(--m26-res-ok);
+	color: var(--m26-ok);
 }
 
 .scheme_modern-2026 .btn.modern a.auto-on {
 	color: var(--m26-accent-2);
 }
 
-/* gather/refine etc */
+/* content */
 .scheme_modern-2026 .btnContent {
-	border-radius: 10px;
+	border-radius: var(--radius-md);
 }
 
-/* tooltip */
-.scheme_modern-2026 .tooltip-inner {
-	background: var(--m26-surface);
+.scheme_modern-2026 .btn .label-content {
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+
+/* panels */
+.scheme_modern-2026 .panelContainer {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--m26-panel);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-lg);
+	box-shadow: none;
+}
+
+.scheme_modern-2026 .panelContainer .title {
 	color: var(--m26-text);
-	border: 1px solid var(--m26-border);
-	border-radius: 10px;
-	box-shadow: 0 30px 80px -60px rgba(154, 163, 255, 0.9);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: var(--font-size-meta);
 }
 
-.scheme_modern-2026 .tooltip-arrow {
-	border-top-color: var(--m26-surface) !important;
+.scheme_modern-2026 .panelContainer .toggle {
+	color: var(--m26-text-dim);
+}
+
+.scheme_modern-2026 .panelContainer .toggle:hover {
+	color: var(--m26-text);
 }
 
 /* log */
-.scheme_modern-2026 #gameLog {
-	background: var(--m26-panel);
-	border: 1px solid var(--m26-border);
-	border-radius: 12px;
-	color: var(--m26-text-subtle);
+.scheme_modern-2026 div#gameLog {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--m26-panel);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-lg);
+	color: var(--m26-text-dim);
+	padding: 8px 10px;
+	/* light text on a dark surface needs a bit more leading and a touch of
+	   tracking to keep the same rhythm as on a light one */
+	line-height: 1.6;
+	letter-spacing: 0.01em;
 }
 
 .scheme_modern-2026 #gameLog .msg {
-	border-top: 1px solid rgba(148, 163, 184, 0.12);
+	border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.scheme_modern-2026 #gameLog .msg:first-child {
+	border-top: none;
 }
 
 .scheme_modern-2026 #gameLog .msg.type_notice { color: var(--m26-accent); }
 .scheme_modern-2026 #gameLog .msg.type_important { color: var(--m26-accent-2); }
-.scheme_modern-2026 #gameLog .msg.type_alert { color: var(--m26-res-low); }
+.scheme_modern-2026 #gameLog .msg.type_alert { color: var(--m26-bad); }
 .scheme_modern-2026 #gameLog .msg.type_date { color: var(--m26-text); }
 
 /* resources */
 .scheme_modern-2026 .res-row,
 .scheme_modern-2026 .craftTable tr {
-	border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+	border-bottom: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .scheme_modern-2026 .resAmount {
@@ -196,29 +253,77 @@
 }
 
 .scheme_modern-2026 .resLimitWarn {
-	color: var(--m26-res-low);
+	color: var(--m26-bad);
+}
+
+.scheme_modern-2026 .resPerTick {
+	color: var(--m26-text-dim);
+}
+
+/* tooltips */
+.scheme_modern-2026 #tooltip {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+.scheme_modern-2026 .tooltip-inner {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--m26-surface);
+	color: var(--text-color);
+	border: 1px solid var(--m26-border-strong);
+	border-radius: var(--radius-md);
+}
+
+.scheme_modern-2026 .tooltip-arrow {
+	border-top-color: var(--m26-surface) !important;
 }
 
 /* dialogs */
 .scheme_modern-2026 .dialog {
-	background: var(--m26-panel);
-	border: 1px solid var(--m26-border);
-	border-radius: 12px;
-	color: var(--m26-text);
-	box-shadow: 0 40px 100px -70px rgba(154, 163, 255, 0.9);
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--m26-panel);
+	border: 1px solid var(--m26-border-strong);
+	border-radius: var(--radius-lg);
+	color: var(--text-color);
+	line-height: 1.6;
+	letter-spacing: 0.01em;
 }
 
 .scheme_modern-2026 .dialog a {
 	color: var(--m26-accent);
 }
 
-/* dropdown */
-.scheme_modern-2026 .button_tooltip {
-	background: var(--m26-surface);
-	border: 1px solid var(--m26-border);
-	border-radius: 10px;
+/* default.css paints these with !important: the dialog buttons and the selects
+   would stay white, and the light text on them would be unreadable */
+.scheme_modern-2026 .dialog input[type='button'] {
+	background: var(--m26-surface) !important;
+	border: 1px solid var(--border-color) !important;
+	color: var(--m26-text) !important;
+	border-radius: var(--radius-pill) !important;
+	box-shadow: none !important;
+}
+
+.scheme_modern-2026 .dialog input[type='button']:hover {
+	border-color: var(--m26-border-strong) !important;
+	background: var(--m26-surface-2) !important;
+}
+
+.scheme_modern-2026 select,
+.scheme_modern-2026 select > option {
+	background-color: var(--m26-surface);
 	color: var(--m26-text);
-	box-shadow: 0 20px 60px -50px rgba(154, 163, 255, 0.8);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+}
+
+/* dropdowns */
+.scheme_modern-2026 .button_tooltip {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%), var(--m26-surface);
+	border: 1px solid var(--m26-border-strong);
+	border-radius: var(--radius-md);
+	color: var(--text-color);
+	/* a flat surface does not blur what is behind it */
+	backdrop-filter: none;
 }
 
 .scheme_modern-2026 .button_tooltip a {
@@ -226,25 +331,28 @@
 }
 
 .scheme_modern-2026 .button_tooltip a:hover {
-	color: var(--m26-text);
+	color: var(--text-color);
 	background: var(--m26-hover);
 }
 
-/* misc */
+/* groups */
 .scheme_modern-2026 .bldTopContainer {
-	border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+	border-bottom: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .scheme_modern-2026 .bldGroupContainer {
-	border-top: 1px solid rgba(148, 163, 184, 0.16);
+	border-top: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .scheme_modern-2026 hr {
-	border-color: rgba(148, 163, 184, 0.16);
+	border-color: rgba(148, 163, 184, 0.18);
 }
 
-/* keep label truncation working with text ellipsis */
-.scheme_modern-2026 .btn .label-content {
-	overflow-x: hidden;
-	text-overflow: ellipsis;
+/* links */
+.scheme_modern-2026 a {
+	color: var(--m26-accent);
+}
+
+.scheme_modern-2026 a:hover {
+	color: var(--m26-accent-2);
 }

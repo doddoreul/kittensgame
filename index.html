@@ -7,7 +7,7 @@
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 		<link rel="shortcut icon" href="res/favicon.gif" type="image/x-icon">
 		<!-- I only use jquery ironically -->
@@ -95,11 +95,55 @@
 
 				var i = (Math.floor(Math.random() * loadingMessages.length));
 				$("#loadingProgressInfo").html(loadingMessages[i] + "...&nbsp(" + progress.toFixed() + "%)");
+				return System.import(moduleUrl(module));
+			}
+
+			// The modules are evaluated in order (each one relies on the globals of
+			// the previous ones) but they do not have to travel in order: fetching
+			// them all at once turns the boot from a chain of round trips into one
+			// parallel download.
+			function moduleUrl(module){
 				var rev = buildRevision;
 				if (invalidateCache){
-					rev += "_" + Date.now();
+					rev += "_" + now;
 				}
-				return System.import(module + ".js?rev_=" + rev);
+				return module + ".js?rev_=" + rev;
+			}
+
+			function prefetchModules(list){
+				// The modules are evaluated in order (each one relies on the globals of
+				// the previous ones) but they do not have to travel in order: fetching
+				// them all at once primes the cache, so the loader finds each module
+				// locally instead of waiting for a round trip of its own.
+				// It only works if the server lets the browser keep the files, hence
+				// the check on the first one: a server that sends no cache headers
+				// would download everything twice.
+				var rest = list.slice(1);
+				fetchModule(list[0], function(cacheable){
+					if (cacheable){
+						for (var i = 0; i < rest.length; i++){
+							fetchModule(rest[i]);
+						}
+					}
+				});
+			}
+
+			function fetchModule(module, done){
+				// the same credentials as the loader, so the cached response is reused
+				fetch(moduleUrl(module), { credentials: "include" }).then(function(response){
+					var headers = response.headers.get("cache-control") || "";
+					var cacheable = headers.indexOf("max-age") > -1 && headers.indexOf("no-store") < 0;
+					return response.text().then(function(){
+						if (done){
+							done(cacheable);
+						}
+					});
+				}).catch(function(){
+					// the loader reports the failure on its own
+					if (done){
+						done(false);
+					}
+				});
 			}
 
 			function _import(module, def){
@@ -215,10 +259,12 @@
 				def = _import("i18n", def);
 				def.then(function () {
 					console.log("Loading locale system");
+					// the build revision is known: the modules can be fetched in parallel
+					// instead of one round trip after the other
+					prefetchModules(["core"].concat(modules));
 					var langPromise = i18nLang.init(now);
 					langPromise.done(function() {
-						loadingMessages = [
-							$I("ui.loading.msg.0"),
+						loadingMessages = [							$I("ui.loading.msg.0"),
 							$I("ui.loading.msg.1"),
 							$I("ui.loading.msg.2"),
 							$I("ui.loading.msg.3"),
@@ -484,7 +530,7 @@
 			</div>
 
 			<div id="creditsDiv" style="display: none" class="dialog credits">
-				<a id="dialogClose" class="close" href="#" onclick="$('#creditsDiv').hide();" style="position: absolute; top: 10px; right: 15px;">close</a>
+				<a id="creditsClose" class="close" href="#" onclick="$('#creditsDiv').hide();" style="position: absolute; top: 10px; right: 15px;">close</a>
 
 				CSS themes: shrx, Kida, Volkeyrn (see top bar of each theme).<br />
 				<br />
@@ -550,7 +596,7 @@
 
 
 			<div id="optionsDiv" style="display: none;" class="dialog help">
-				<a id="dialogClose" href="#" class="close" onclick="gamePage.closeOptions()" style="position: absolute; top: 10px; right: 15px;">close</a>
+				<a id="optionsClose" href="#" class="close" onclick="gamePage.closeOptions()" style="position: absolute; top: 10px; right: 15px;">close</a>
 
 				<div style="display: flex; gap: 25px; flex-wrap: nowrap; align-items: flex-start;">
 					<div>
@@ -625,7 +671,7 @@
 			</div>
 
 			<div id="appDiv" style="display: none" class="dialog help">
-				<a id="dialogClose" href="#" class="close" style="position: absolute; top: 10px; right: 15px;">close</a>
+				<a id="appClose" href="#" class="close" onclick="$('#appDiv').hide();" style="position: absolute; top: 10px; right: 15px;">close</a>
 
 				<span id="appText">Kittens Game Mobile has been released! Click on the link to follow:</span>
 				<br>

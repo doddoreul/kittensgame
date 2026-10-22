@@ -1740,6 +1740,9 @@ var BuildingBtnController = dojo.declare("com.nuclearunicorn.game.ui.BuildingBtn
 		var model = this.inherited("fetchModel", arguments);
 		model.hasSellLink = this.hasSellLink(model);
 		model.showSellLink = model.metadata && model.metadata.val && model.hasSellLink;
+		// the name of a building does not always fit in the button: the tooltip
+		// carries it, like the job and craft buttons do
+		model.tooltipName = true;
 		var self = this;
 		if (typeof(model.metadata.togglableOnOff) != "undefined") {
 			model.togglableOnOffLink = {
