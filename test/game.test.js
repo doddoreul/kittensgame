@@ -1250,7 +1250,16 @@ test("Dead fauna stuck on an idle biome is reaped", () => {
     expect(homeBiome.fauna.length).toBe(0);
 });
 
-test("HQ upgrade model exposes manpower price", () => {
+test("Fauna spawning on a never-leveled biome is not NaN", () => {
+    const plains = game.village.getBiome("plains");
+    delete plains.on; // never explored / not in the save
+    delete plains.fauna; // as after a fresh load
+    const fauna = game.village.map.createFauna(plains, "raptor");
+    expect(fauna.hp).toBeGreaterThan(0);
+    expect(fauna.level).toBeGreaterThan(0);
+});
+
+test("HQ upgrade model carries a visible manpower price", () => {
     const controller = new classes.village.ui.map.UpgradeHQController(game);
     const model = controller.fetchModel({ key: "upgradeHQ", name: "Upgrade HQ", prices: [{ name: "manpower", val: 250 }] });
     controller.fetchExtendedModel(model);

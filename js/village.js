@@ -2255,13 +2255,14 @@ dojo.declare("classes.village.Map", null, {
 		var levelJitter = deterministic ? 1 : (1 + (Math.random() * 2 - 1) * 0.15);
 		var hpJitter = deterministic ? 1 : (1 + (Math.random() * 2 - 1) * 0.15);
 
-		var offset = Math.round(biome.mobLevel * Math.pow(biome.on, 0.6 * powerLawMultiplier));
+		var offset = Math.round(biome.mobLevel * Math.pow(biome.on || 0, 0.6 * powerLawMultiplier));
 		var mobLevel = Math.round(
 			biome.mobLevel / 3 +
-			(1.8 * Math.pow(biome.on, 1.50 * powerLawMultiplier) + offset) *
+			(1.8 * Math.pow(biome.on || 0, 1.50 * powerLawMultiplier) + offset) *
 			levelJitter
 		);
-		if (mobLevel <= 0) {
+		//NaN-safe clamp: a biome never leveled has on === undefined (NaN through pow) and would spawn broken fauna
+		if (!(mobLevel > 0)) {
 			mobLevel = 1;
 		}
 
