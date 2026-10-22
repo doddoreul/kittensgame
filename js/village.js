@@ -2759,8 +2759,6 @@ dojo.declare("classes.ui.village.BiomeBtnController", com.nuclearunicorn.game.ui
 			return;
 		}
 		var biome = model.biome;
-		console.log("CURRENT BIOME:", biome);
-
 		map.currentBiome = biome.name;
 		map.lastBiome = biome.name;
 	},
@@ -3079,12 +3077,13 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 		this.explorerDiv = dojo.create("div", {style:{display:"flex", width:"100%"}}, div);
 		var explorerMaxHp = map.getMaxHP().toFixed(0);
 		var explorerHpRatio = map.squad.hp / map.getMaxHP();
+		var explorerEff = Math.floor(map.energy / map.getMaxEnergy() * 100);
 		this.explorerLeftDiv = dojo.create("div", {
 			style:{width:"50%"},
 			innerHTML: "Explorers:<br>HP: " + this.game.getDisplayValueExt(map.squad.hp) + "/" + this.game.getDisplayValueExt(explorerMaxHp) +
 				"<div style='width:100%;height:4px;background:#333;margin-top:2px;'>" +
 				"<div style='width:" + (explorerHpRatio * 100).toFixed(0) + "%;height:100%;background:#4a4;'></div></div>" +
-				"<br>Stamina: " + map.energy.toFixed(0) + "/" + map.getMaxEnergy().toFixed(0) + " [eff:100%]" +
+				"<br>Stamina: " + map.energy.toFixed(0) + "/" + map.getMaxEnergy().toFixed(0) + " [eff:" + explorerEff + "%]" +
 				"<br>ATK: " + map.squad.atk.toFixed(0) + " | DEF: " + map.squad.def.toFixed(0) + " | AGI: " + map.squad.agi.toFixed(0) + " | STR: " + map.squad.str.toFixed(0)
 				// + " | SPD: " + map.squad.spd.toFixed(0)
 

@@ -2406,7 +2406,7 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 	featureFlags: {
 		VILLAGE_MAP: {
 			beta: true,
-			main: false,
+			main: true,
 			mobile: false
 		},
 		SPACE_EXPL: {
