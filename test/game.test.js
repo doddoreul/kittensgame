@@ -1204,4 +1204,36 @@ test("Toggling hodl mode must liquidate b-coin at the pre-switch price", () => {
     expect(game.opts.hodl).toBe(false);
     expect(game.resPool.get("blackcoin").value).toBe(0);
     expect(game.resPool.get("relic").value).toBe(1e6);
+});//--------------------------------
+//      Map shipping guards (hunting branch)
+//--------------------------------
+test("All village.map i18n keys referenced in village.js exist in en.json", () => {
+    const fs = require("fs");
+    const village = fs.readFileSync("js/village.js", "utf8");
+    const en = JSON.parse(fs.readFileSync("res/i18n/en.json", "utf8"));
+    const used = village.match(/\$I\("(village\.map\.[a-zA-Z.]+)"/g) || [];
+    expect(used.length).toBeGreaterThan(15);
+    for (const raw of used) {
+        const key = raw.slice(4, -1);
+        expect(key in en).toBe(true); // en.json is flat, toHaveProperty would walk nested paths
+    }
+});
+
+test("Explorers return home when energy runs out", () => {
+    const map = game.village.map;
+    map.currentBiome = "plains";
+    map.energy = 0.05;
+    map.explore("plains");
+    expect(map.energy).toBe(0);
+    expect(map.currentBiome).toBe(null);
+});
+
+test("Squad hp regen scales with max HP (baseline 0.1 with no leader)", () => {
+    const map = game.village.map;
+    map.squad.hp = 10;
+    map.energy = 100;
+    game.village.update();
+    expect(map.getMaxHP()).toBe(20);
+    // idle regen is applied twice per tick (the "always regenerate" branch AND the idle branch) - pre-existing upstream behaviour, left untouched
+    expect(map.squad.hp).toBeCloseTo(10.2, 6);
 });

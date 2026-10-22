@@ -2306,7 +2306,7 @@ dojo.declare("classes.village.Map", null, {
 		}
 
 		var maxFaunaLevel = (biome.fauna && biome.fauna.length) ? biome.fauna[0].level : 0;
-		for (var fi = 1; fi < biome.fauna.length; fi++) {
+		for (var fi = 1; biome.fauna && fi < biome.fauna.length; fi++) {
 			if (biome.fauna[fi].level > maxFaunaLevel) {
 				maxFaunaLevel = biome.fauna[fi].level;
 			}
@@ -2347,8 +2347,8 @@ dojo.declare("classes.village.Map", null, {
 
 		if (this.energy <= 0){
 			this.energy = 0;
-			//this.currentBiome = null;
-			//this.game.msg("Your explorers have returned from expedition", "important", "explore");
+			this.currentBiome = null;
+			this.game.msg($I("village.map.msg.returned"), "important", "explore");
 		}
 
 		//get biome level price based on the terrain difficulty and current explored level
@@ -2656,7 +2656,7 @@ dojo.declare("classes.village.Map", null, {
 	},
 
 	getPriceReduction: function(){
-		return Math.sqrt(this.exploredLevel - 1) * 0.00002;
+		return Math.sqrt(Math.max(0, this.exploredLevel - 1)) * 0.00002;
 	},
 
 	updateEffectCached: function(){
@@ -3138,8 +3138,10 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 			var etaText = "";
 
 			var cpPerTick = this.game.village.map.getCPPerTick(biome);
-			var etaSeconds = cpRemaining / (cpPerTick * this.game.getTicksPerSecondUI());
-			etaText = ", " + $I("village.map.panel.eta") +this.game.toDisplaySeconds(etaSeconds);
+			if (cpPerTick > 0) {
+				var etaSeconds = cpRemaining / (cpPerTick * this.game.getTicksPerSecondUI());
+				etaText = ", " + $I("village.map.panel.eta") + this.game.toDisplaySeconds(etaSeconds);
+			}
 
 			this.explorationDiv.innerHTML = $I("village.map.panel.exploring", [biome.title]) +
 			(biome.cp / toLevel * 100).toFixed(0) +

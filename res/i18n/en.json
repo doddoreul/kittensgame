@@ -2709,4 +2709,6 @@
     "village.map.tooltip.dodgeChance": "Dodge chance: "
 ,
     "village.map.panel.explorers": "Explorers"
+,
+    "village.map.msg.returned": "Your explorers have returned from expedition"
 }

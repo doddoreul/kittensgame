@@ -2633,4 +2633,6 @@
     "village.map.tooltip.dodgeChance": "Chances d'esquive : "
 ,
     "village.map.panel.explorers": "Éclaireurs"
+,
+    "village.map.msg.returned": "Vos éclaireurs sont rentrés d'expédition"
 }
