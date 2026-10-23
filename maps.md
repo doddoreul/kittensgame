@@ -69,6 +69,23 @@ Table complète des bonus (par niveau actif) :
 
 Le bonus en cours de chaque biome (bonus × niveaux actifs) est affiché dans son tooltip : **Bonus actifs : fer +3%** etc.
 
+### Comment débloquer les biomes
+
+| Biome | Condition de déblocage |
+|---|---|
+| Plains, Forest | Disponibles dès le début |
+| Hills | Plains **ou** Forest ≥ 5 |
+| Mountain | Hills ≥ 10 |
+| Desert | Plains ≥ 15 |
+| Rain Forest | Forest ≥ 15 **et** Desert ≥ 10 |
+| Bone Forest | Forest ≥ 25 **et** Rain Forest ≥ 5 |
+| Swamp | Rain Forest ≥ 10 |
+| Volcano | Mountain ≥ 25 |
+| Crimson Desert | Volcano ≥ 10 **et** Swamp ≥ 10 |
+| Redmoon | Programme spatial **Mission lunaire** lancé |
+
+Les conditions sont vérifiées en continu dès qu'elles sont réunies — pas besoin d'explorer le biome parent un niveau de plus. *Note : cette table reflète notre fork ; bloodrizer peut éventuellement recalibrer ces conditions.*
+
 ---
 
 ## 5. Explorer — la mécanique centrale

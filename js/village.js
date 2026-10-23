@@ -2018,6 +2018,9 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			manpowerRatio: 0.01
 		},
+		evaluateLocks: function(game){
+			return game.village.getBiomeLevel("forest") >= 15 && game.village.getBiomeLevel("desert") >= 10;
+		},
 		lore: {
 			5: "The trees are so tall you don't see where it ends. When the rain starts it can go for hundreds of years.",
 			10: "In the fog you can see the mountains. The mountains have eyes and sometimes change places."
@@ -2093,6 +2096,9 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			uraniumRatio: 0.01
 		},
+		evaluateLocks: function(game){
+			return game.village.getBiomeLevel("volcano") >= 10 && game.village.getBiomeLevel("swamp") >= 10;
+		},
 		lore: {
 			5: "There are tales of horrible monsters and lost cities and endless deserts of red sand",
 			10: "You can travel further. But you don’t really want to see what’s there in the desert.",
@@ -2108,6 +2114,9 @@ dojo.declare("classes.village.Map", null, {
 		faunaNames: ["bog toad", "swamp serpent", "poison spore"],
 		effects: {
 			oilRatio: 0.01
+		},
+		evaluateLocks: function(game){
+			return game.village.getBiomeLevel("rainForest") >= 10;
 		},
 		lore: {
 			1: "Everything that is edible is poisonous and so are the trees and the grass and the air is also poisonous slightly",
@@ -2135,6 +2144,9 @@ dojo.declare("classes.village.Map", null, {
 		lore: {
 			5: "You know why this moon is red",
 			10: "Under the basins, mountains and craters and the endless oceans of red dust you can sense the shape of something giant and snake-like coiled into an impossible knot",
+		},
+		evaluateLocks: function(game){
+			return game.space.getProgram("moonMission").on;
 		},
 		unlocked: false
 	}

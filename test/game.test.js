@@ -1211,6 +1211,29 @@ test("Legacy map option ships disabled by default", () => {
     expect(game.opts.legacyMap).toBe(false);
 });
 
+test("Former dead-end biomes now have reachable unlock chains", () => {
+    // scripted levels, then run the per-tick lock evaluation
+    const levels = { plains: 15, forest: 15, hills: 10, desert: 10, rainForest: 10, volcano: 10, swamp: 10 };
+    const saved = {};
+    for (const name in levels) {
+        const b = game.village.getBiome(name);
+        saved[name] = { unlocked: b.unlocked, val: b.val, on: b.on };
+        b.unlocked = true; b.val = levels[name];
+    }
+    const moon = game.space.getProgram("moonMission");
+    const moonWasOn = moon.on;
+    moon.on = true;
+    game.village.map.updateLocks();
+    for (const name of ["rainForest", "swamp", "bloodDesert", "redmoon", "desert", "mountain"]) {
+        expect(game.village.getBiome(name).unlocked).toBe(true);
+    }
+    // restore whatever state we scripted
+    for (const name in saved) {
+        Object.assign(game.village.getBiome(name), saved[name]);
+    }
+    moon.on = moonWasOn;
+});
+
 test("All village.map i18n keys referenced in village.js exist in en.json", () => {
     const fs = require("fs");
     const village = fs.readFileSync("js/village.js", "utf8");
