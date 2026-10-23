@@ -2978,6 +2978,10 @@ dojo.declare("classes.ui.village.BiomeBtn", com.nuclearunicorn.game.ui.ButtonMod
 			}, tooltip);
 			dojo.create("div", {
 				className: "desc small",
+				innerHTML: $I("village.map.tooltip.activeLevels") + (biomeMeta.on || 0) + "/" + (biomeMeta.val || 0)
+			}, tooltip);
+			dojo.create("div", {
+				className: "desc small",
 				innerHTML: $I("village.map.tooltip.freeToggles")
 			}, tooltip);
 

@@ -2633,7 +2633,8 @@
     "village.map.tooltip.dodgeChance": "Chances d'esquive : "
 ,
     "village.map.tooltip.exploreCost": "Coût d'exploration : ",
-    "village.map.tooltip.freeToggles": "+ / − sont gratuits"
+    "village.map.tooltip.freeToggles": "+ / − sont gratuits",
+    "village.map.tooltip.activeLevels": "Niveaux actifs : "
 ,
     "village.map.panel.explorers": "Éclaireurs"
 ,
