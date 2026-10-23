@@ -1944,11 +1944,14 @@ dojo.declare("classes.village.Map", null, {
 	{
 		name: "hills",
 		title: "Hills",
-		desc: "TBD",
+		desc: "Improves your iron production by 1% per level",
 		mobLevel: 3,
 		terrainPenalty: 1.2,
 		unlocked: false,
 		faunaNames: ["rock lizard", "centipede", "stone toad", "cave bat"],
+		effects: {
+			ironRatio: 0.01
+		},
 		unlocks: {
 			biomes: ["mountain"]
 		},
@@ -1990,10 +1993,14 @@ dojo.declare("classes.village.Map", null, {
 	{
 		name: "boneForest",
 		title: "Bone Forest",
+		description: "Improves your gold production by 1% per level",
 		terrainPenalty: 1.9,
 		mobLevel: 30,
 		faunaNames: ["bone spider"],
 		unlocked: false,
+		effects: {
+			goldRatio: 0.01
+		},
 		evaluateLocks: function(game){
 			return game.village.getBiomeLevel("forest") >= 25 && game.village.getBiomeLevel("rainForest") >= 5;
 		},
@@ -2003,13 +2010,18 @@ dojo.declare("classes.village.Map", null, {
 	},{
 		name: "rainForest",
 		title: "Rain Forest",
-		description: "TBD",
+		description: "Improves your catpower production by 1% per level",
 		terrainPenalty: 1.4,
 		mobLevel: 15,
 		faunaNames: ["poison frog", "razor leech", "jaguar", "giant centipede"],
 		unlocked: false,
-		5: "The trees are so tall you don't see where it ends. When the rain starts it can go for hundreds of years.",
-		10: "In the fog you can see the mountains. The mountains have eyes and sometimes change places."
+		effects: {
+			manpowerRatio: 0.01
+		},
+		lore: {
+			5: "The trees are so tall you don't see where it ends. When the rain starts it can go for hundreds of years.",
+			10: "In the fog you can see the mountains. The mountains have eyes and sometimes change places."
+		}
 	},
 	{
 		name: "mountain",
@@ -2039,11 +2051,14 @@ dojo.declare("classes.village.Map", null, {
 	{
 		name: "volcano",
 		title: "Volcano",
-		description: "TBD",
+		description: "Improves your coal production by 1% per level",
 		terrainPenalty: 3.5,
 		faunaNames: ["magma slug", "lava beetle"],
 		unlocked: false,
 		mobLevel: 50,
+		effects: {
+			coalRatio: 0.01
+		},
 		lore: {
 			5: "TBD"
 		},
@@ -2071,10 +2086,13 @@ dojo.declare("classes.village.Map", null, {
 	},{
 		name: "bloodDesert",
 		title: "Crimson Desert",
-		description: "",
+		description: "Improves your uranium production by 1% per level",
 		mobLevel: 75,
 		terrainPenalty: 1.5,
 		faunaNames: ["blood scarab", "crimson basilisk"],
+		effects: {
+			uraniumRatio: 0.01
+		},
 		lore: {
 			5: "There are tales of horrible monsters and lost cities and endless deserts of red sand",
 			10: "You can travel further. But you don’t really want to see what’s there in the desert.",
@@ -2085,10 +2103,14 @@ dojo.declare("classes.village.Map", null, {
 		name: "swamp",
 		title: "Swamp",
 		mobLevel: 25,
-		description : "Everything that is edible is poisonous and so are the trees and the grass and the air is also poisonous slightly",
+		description : "Improves your oil production by 1% per level",
 		terrainPenalty: 1.95,
 		faunaNames: ["bog toad", "swamp serpent", "poison spore"],
+		effects: {
+			oilRatio: 0.01
+		},
 		lore: {
+			1: "Everything that is edible is poisonous and so are the trees and the grass and the air is also poisonous slightly",
 			5: "Everything here tries to kill you",
 			10: "All plants here are poisonous and so are the trees and the water and the air is also poisonous slightly",
 			15: "All you can see are the endless swamplands with lost ziggurats and rotten watchtowers"
@@ -2675,7 +2697,9 @@ dojo.declare("classes.village.Map", null, {
 			}
 			for (var effect in biome.effects) {
 				var effectVal = biome.effects[effect];
-				this.game.globalEffectsCached[effect] += ( effectVal * (biome.on || 0) );
+				//guard the cache sum: a biome can use an effect key that no manager initializes (e.g. ironRatio)
+				var cachedEffect = this.game.globalEffectsCached[effect] || 0;
+				this.game.globalEffectsCached[effect] = cachedEffect + ( effectVal * (biome.on || 0) );
 			}
 		}
 	},
@@ -2980,6 +3004,28 @@ dojo.declare("classes.ui.village.BiomeBtn", com.nuclearunicorn.game.ui.ButtonMod
 				className: "desc small",
 				innerHTML: $I("village.map.tooltip.activeLevels") + (biomeMeta.on || 0) + "/" + (biomeMeta.val || 0)
 			}, tooltip);
+
+			//current active bonuses (effect value x active level); village's exploration bonus lives outside of biome.effects
+			var bonusParts = [];
+			if (biomeMeta.effects){
+				for (var effectKey in biomeMeta.effects){
+					var resName = effectKey.substring(0, effectKey.length - "Ratio".length);
+					var res = game.resPool.get(resName);
+					var bonusValue = biomeMeta.effects[effectKey] * (biomeMeta.on || 0) * 100;
+					if (bonusValue > 0){
+						bonusParts.push((res ? res.title : resName) + " +" + game.getDisplayValueExt(bonusValue) + "%");
+					}
+				}
+			}
+			if (biomeMeta.name == "village" && (biomeMeta.on || 0) > 1){
+				bonusParts.push($I("village.map.tooltip.explorationBonus") + " +" + game.getDisplayValueExt(10 * ((biomeMeta.on || 0) - 1)) + "%");
+			}
+			if (bonusParts.length){
+				dojo.create("div", {
+					className: "desc small",
+					innerHTML: $I("village.map.tooltip.activeBonus") + bonusParts.join(", ")
+				}, tooltip);
+			}
 			dojo.create("div", {
 				className: "desc small",
 				innerHTML: $I("village.map.tooltip.freeToggles")

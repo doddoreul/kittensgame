@@ -1259,6 +1259,15 @@ test("Fauna spawning on a never-leveled biome is not NaN", () => {
     expect(fauna.level).toBeGreaterThan(0);
 });
 
+test("Designed biome bonuses reach the engine effects cache", () => {
+    const map = game.village.map;
+    const hills = game.village.getBiome("hills");
+    hills.unlocked = true; hills.val = 5; hills.on = 3;
+    map.updateEffectCached();
+    expect(game.globalEffectsCached["ironRatio"]).toBeCloseTo(0.03, 8);
+    hills.on = 0; map.updateEffectCached(); // restore
+});
+
 test("HQ upgrade model carries a visible manpower price", () => {
     const controller = new classes.village.ui.map.UpgradeHQController(game);
     const model = controller.fetchModel({ key: "upgradeHQ", name: "Upgrade HQ", prices: [{ name: "manpower", val: 250 }] });
