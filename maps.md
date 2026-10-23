@@ -84,7 +84,7 @@ Le bonus en cours de chaque biome (bonus × niveaux actifs) est affiché dans so
 | Crimson Desert | Volcano ≥ 10 **et** Swamp ≥ 10 |
 | Redmoon | Programme spatial **Mission lunaire** lancé |
 
-Les conditions sont vérifiées en continu dès qu'elles sont réunies — pas besoin d'explorer le biome parent un niveau de plus. *Note : cette table reflète notre fork ; bloodrizer peut éventuellement recalibrer ces conditions.*
+Les conditions sont vérifiées en continu dès qu'elles sont réunies — pas besoin d'explorer le biome parent un niveau de plus. *Ce fork est désormais la version de référence : le dev d'origine a abandonné le projet.*
 
 ---
 
@@ -153,4 +153,4 @@ Des créatures **patrouillent naturellement** les biomes, que tu y sois ou non (
 
 ---
 
-**Limites connues :** descriptions et faune de certains biomes (Forest, etc.) sont en anglais et génériques — contenu amont « en dur » non traduit ; l'**exploration spatiale** (SPACE_EXPL) n'existe pas encore dans ce build.
+**Limites connues :** descriptions et faune de certains biomes (Forest, etc.) sont en anglais et génériques — contenu d'origine non traduit ; l'**exploration spatiale** (SPACE_EXPL) n'existe pas encore dans ce build.
