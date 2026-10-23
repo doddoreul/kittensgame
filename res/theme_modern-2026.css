@@ -12,7 +12,7 @@
 
 .scheme_modern-2026 {
 	/* --- palette (primitives) --- */
-	--m26-bg: #f2f3f4;
+	--m26-bg: #F0F8FF;
 	--m26-page: var(--m26-bg);
 	--m26-panel: #ffffff;
 	--m26-surface: #f7f8f9;
