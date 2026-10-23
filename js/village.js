@@ -2980,12 +2980,6 @@ dojo.declare("classes.ui.village.BiomeBtn", com.nuclearunicorn.game.ui.ButtonMod
 				className: "desc small",
 				innerHTML: $I("village.map.tooltip.activeLevels") + (biomeMeta.on || 0) + "/" + (biomeMeta.val || 0)
 			}, tooltip);
-
-			//the only priced "upgrade" on this panel: the next HQ rank (250 manpower x1.25^level), same math as UpgradeHQController.getPrices
-			dojo.create("div", {
-				className: "desc small",
-				innerHTML: $I("village.map.tooltip.hqUpgrade") + game.getDisplayValueExt(250 * Math.pow(1.25, map.hqLevel)) + " " + game.resPool.get("manpower").title
-			}, tooltip);
 			dojo.create("div", {
 				className: "desc small",
 				innerHTML: $I("village.map.tooltip.freeToggles")
