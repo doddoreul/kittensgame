@@ -5884,7 +5884,7 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.Village", com.nuclearunicorn.game.u
 		}
 		
 		//--------------------------	map ---------------------------
-		var isMapVisible = this.game.getFeatureFlag("VILLAGE_MAP") && this.game.science.get("archery").researched/* &&
+		var isMapVisible = this.game.getFeatureFlag("VILLAGE_MAP") && this.game.opts.legacyMap && this.game.science.get("archery").researched/* &&
 			this.game.resPool.get("paragon").value >= 5*/;
 
 

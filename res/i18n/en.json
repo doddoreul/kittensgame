@@ -1967,6 +1967,8 @@
     "ui.option.highlight.unavailable": "Highlight buildings limited by storage space",
     "ui.option.hide.sell": "Hide 'sell' buttons",
     "ui.option.hide.downgrade": "Hide 'downgrade' buttons",
+    "ui.option.legacy.map": "Enable the biome map (exploration & squad hunting)",
+    "ui.option.legacy.map.tip": "Shows the biome map panel on the village tab. Exploration unlocks with Archery; disabled by default.",
     "ui.option.hide.bgimage": "Hide background image <i>(for color schemes where applicable)</i>",
     "ui.option.tooltips.right": "Move tooltips in right column",
     "ui.option.more": "More...",

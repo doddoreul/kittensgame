@@ -1207,6 +1207,10 @@ test("Toggling hodl mode must liquidate b-coin at the pre-switch price", () => {
 });//--------------------------------
 //      Map shipping guards (hunting branch)
 //--------------------------------
+test("Legacy map option ships disabled by default", () => {
+    expect(game.opts.legacyMap).toBe(false);
+});
+
 test("All village.map i18n keys referenced in village.js exist in en.json", () => {
     const fs = require("fs");
     const village = fs.readFileSync("js/village.js", "utf8");

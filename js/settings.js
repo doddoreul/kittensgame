@@ -91,6 +91,12 @@ dojo.declare("classes.managers.SettingsManager", com.nuclearunicorn.core.TabMana
 		defaultValue: false,
 		label: $I("ui.option.hide.downgrade")
 	}, {
+		name: "legacyMap",
+		defaultValue: false,
+		label: $I("ui.option.legacy.map"),
+		tooltip: $I("ui.option.legacy.map.tip"),
+		triggerUpdateUI: true
+	}, {
 		name: "hideBGImage",
 		defaultValue: false,
 		label: $I("ui.option.hide.bgimage"),

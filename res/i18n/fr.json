@@ -1904,6 +1904,8 @@
     "ui.option.highlight.unavailable": "Mettre en surbrillance les bâtiments limités par l'espace de stockage",
     "ui.option.hide.sell": "Masquer les boutons « vente »",
     "ui.option.hide.downgrade": "Masquer les boutons « rétrograder »",
+    "ui.option.legacy.map": "Activer la carte des biomes (exploration & chasse d'escouade)",
+    "ui.option.legacy.map.tip": "Affiche le panneau de la carte sur l'onglet Village. L'exploration se débloque avec Archerie ; désactivé par défaut.",
     "ui.option.hide.bgimage": "Masquer l'image d'arrière-plan <i>(pour les thèmes concernés)</i>",
     "ui.option.tooltips.right": "Déplacer les info-bulles dans la colonne de droite",
     "ui.option.more": "Plus...",
