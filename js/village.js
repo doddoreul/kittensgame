@@ -1952,6 +1952,11 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			ironRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "iron", value: 50, chance: 0.9, width: 0.15, multiplier: 1.05,
+			}
+		],
 		unlocks: {
 			biomes: ["mountain"]
 		},
@@ -2001,6 +2006,11 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			goldRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "gold", value: 25, chance: 0.75, width: 0.15, multiplier: 1.05,
+			}
+		],
 		evaluateLocks: function(game){
 			return game.village.getBiomeLevel("forest") >= 25 && game.village.getBiomeLevel("rainForest") >= 5;
 		},
@@ -2018,6 +2028,14 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			manpowerRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "wood", value: 75, chance: 0.75, width: 0.15, multiplier: 1.05,
+			},
+			{
+				name: "catnip", value: 150, chance: 0.9, width: 0.15, multiplier: 1.05,
+			}
+		],
 		evaluateLocks: function(game){
 			return game.village.getBiomeLevel("forest") >= 15 && game.village.getBiomeLevel("desert") >= 10;
 		},
@@ -2033,6 +2051,11 @@ dojo.declare("classes.village.Map", null, {
 		mobLevel: 35,
 		terrainPenalty: 1.2,
 		faunaNames: ["mountain goat", "rock worm", "yeti cub"],
+		rewards: [
+			{
+				name: "minerals", value: 150, chance: 0.9, width: 0.15, multiplier: 1.05,
+			}
+		],
 		lore: {
 			5: "Remember to grab your mandatory 50 meters of rope. The ascend will take quite some time.",
 			10: "A small and larger structures cut from a limestone are towering there. Griffins call this place The White Citadel.",
@@ -2062,8 +2085,16 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			coalRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "coal", value: 150, chance: 0.9, width: 0.15, multiplier: 1.05,
+			},
+			{
+				name: "titanium", value: 10, chance: 0.35, width: 0.1, multiplier: 1.1,
+			}
+		],
 		lore: {
-			5: "TBD"
+			5: "The mountain breathes. You realize with horror that it was never a mountain."
 		},
 		evaluateLocks: function(game){
 			return game.village.getBiomeLevel("mountain") >= 25;
@@ -2086,6 +2117,14 @@ dojo.declare("classes.village.Map", null, {
 		effects:{
 			solarFarmRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "titanium", value: 5, chance: 0.5, width: 0.1, multiplier: 1.1,
+			},
+			{
+				name: "iron", value: 75, chance: 0.75, width: 0.15, multiplier: 1.05,
+			}
+		],
 	},{
 		name: "bloodDesert",
 		title: "Crimson Desert",
@@ -2096,6 +2135,11 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			uraniumRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "uranium", value: 1, chance: 0.75, width: 0.1, multiplier: 1.1,
+			}
+		],
 		evaluateLocks: function(game){
 			return game.village.getBiomeLevel("volcano") >= 10 && game.village.getBiomeLevel("swamp") >= 10;
 		},
@@ -2115,6 +2159,11 @@ dojo.declare("classes.village.Map", null, {
 		effects: {
 			oilRatio: 0.01
 		},
+		rewards: [
+			{
+				name: "oil", value: 25, chance: 0.75, width: 0.15, multiplier: 1.05,
+			}
+		],
 		evaluateLocks: function(game){
 			return game.village.getBiomeLevel("rainForest") >= 10;
 		},
@@ -2132,15 +2181,43 @@ dojo.declare("classes.village.Map", null, {
 		title: "Cath",
 		description : "Little pale green dot",
 		terrainPenalty: 10,
+		mobLevel: 100,
+		faunaNames: ["star mule", "void slime", "moon cat"],
+		effects: {
+			starchartRatio: 0.01
+		},
+		rewards: [
+			{
+				name: "titanium", value: 15, chance: 0.5, width: 0.1, multiplier: 1.1,
+			},
+			{
+				name: "unobtainium", value: 1, chance: 0.75, width: 0.05, multiplier: 1.05,
+			}
+		],
 		lore: {
+			5: "The pale green dot keeps getting closer without ever getting smaller",
+			10: "Everything appears to be a garden. Lanes, houses, smoke out of the chimneys. You see no one"
 		},
 		unlocked: true
 	},
 	{
 		name: "redmoon",
 		title: "Redmoon",
-		description : "Red moon description",
+		description : "A red satellite orbiting Cath, scarred by something very old",
 		terrainPenalty: 20,
+		mobLevel: 150,
+		faunaNames: ["dust wraith", "red serpent", "basin leech"],
+		effects: {
+			scienceRatio: 0.01
+		},
+		rewards: [
+			{
+				name: "uranium", value: 2, chance: 0.75, width: 0.1, multiplier: 1.1,
+			},
+			{
+				name: "relic", value: 1, chance: 0.02, width: 0.02, multiplier: 1.05,
+			}
+		],
 		lore: {
 			5: "You know why this moon is red",
 			10: "Under the basins, mountains and craters and the endless oceans of red dust you can sense the shape of something giant and snake-like coiled into an impossible knot",
@@ -3084,7 +3161,7 @@ dojo.declare("classes.village.ui.MapOverviewWgt", [mixin.IChildrenAware, mixin.I
 			this.addChild(new classes.ui.village.BiomeBtn({
 				id: biome.name,
 				name: biome.title,
-				description: biome.desc,
+				description: biome.desc || biome.description,
 				prices: [],
 				controller: new classes.ui.village.BiomeBtnController(game)
 			}, game));

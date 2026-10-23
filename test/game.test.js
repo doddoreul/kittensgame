@@ -1211,6 +1211,26 @@ test("Legacy map option ships disabled by default", () => {
     expect(game.opts.legacyMap).toBe(false);
 });
 
+test("Map is 100% authored: no TBD, every biome has effects, fauna and rewards", () => {
+    const fs = require("fs");
+    const village = fs.readFileSync("js/village.js", "utf8");
+    const biomeRegion = village.slice(village.indexOf("maps: ["), village.indexOf("constructor: function"));
+    expect(biomeRegion.includes("TBD")).toBe(false); // only the map data, not unrelated comments elsewhere
+
+    for (const biome of game.village.map.biomes) {
+        expect(biome.desc || biome.description).toBeTruthy();          // description shows in tooltip
+        expect(biome.mobLevel).toBeGreaterThan(0);                     // fauna scales with tier
+        expect(biome.rewards && biome.rewards.length).toBeGreaterThan(0); // every level grants something
+        if (biome.name != "village" && biome.name != "cath") {
+            expect(biome.effects && Object.keys(biome.effects).length).toBeGreaterThan(0); // production bonus
+        }
+    }
+    const cath = game.village.getBiome("cath"), redmoon = game.village.getBiome("redmoon");
+    expect(cath.faunaNames.length).toBeGreaterThan(0);
+    expect(redmoon.faunaNames.length).toBeGreaterThan(0);
+    expect(typeof redmoon.evaluateLocks).toBe("function");
+});
+
 test("Former dead-end biomes now have reachable unlock chains", () => {
     // scripted levels, then run the per-tick lock evaluation
     const levels = { plains: 15, forest: 15, hills: 10, desert: 10, rainForest: 10, volcano: 10, swamp: 10 };

@@ -84,6 +84,28 @@ Le bonus en cours de chaque biome (bonus × niveaux actifs) est affiché dans so
 | Crimson Desert | Volcano ≥ 10 **et** Swamp ≥ 10 |
 | Redmoon | Programme spatial **Mission lunaire** lancé |
 
+*Redmoon se trouve dans la **Carte Espace** (avec Cath, disponible dès le début de la carte), qui n'apparaît qu'après le **Lancement orbital**.*
+
+### Ce que chaque niveau rapporte (récompenses de nettoyage)
+
+Chaque nouveau niveau exploré accorde des ressources aléatoires en plus du bonus permanent :
+
+| Biome | Récompenses |
+|---|---|
+| Village | catnip, bois |
+| Plains | catnip, bois |
+| Hills | fer |
+| Forest | bois, catnip |
+| Rain Forest | catnip, bois |
+| Desert | titane, fer |
+| Mountain | minéraux |
+| Bone Forest | or |
+| Swamp | pétrole |
+| Volcano | charbon, titane |
+| Crimson Desert | uranium |
+| Cath | titane, unobtainium |
+| Redmoon | uranium, **relique** (rarissime, ~2%) |
+
 Les conditions sont vérifiées en continu dès qu'elles sont réunies — pas besoin d'explorer le biome parent un niveau de plus. *Ce fork est désormais la version de référence : le dev d'origine a abandonné le projet.*
 
 ---
