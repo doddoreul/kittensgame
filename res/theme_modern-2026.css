@@ -96,7 +96,9 @@
 	border: none;
 	margin-top: 33px;
 }
-
+.scheme_modern-2026 #rightColumn {
+	min-width: 240px;
+}
 /* top bar */
 .scheme_modern-2026 #gamePageContainer #topBar {
 	background: var(--m26-surface-2);
