@@ -272,7 +272,11 @@
 }
 
 .scheme_modern-2026 .resLimitWarn {
-	color: var(--m26-bad);
+	color: #c65a38; /* dark coral, upstream 75%-full cue */
+}
+
+.scheme_modern-2026 .resLimitNotice {
+	color: #b45309; /* dark orange, upstream full-stock cue */
 }
 
 .scheme_modern-2026 .resPerTick {
