@@ -2634,7 +2634,8 @@
 ,
     "village.map.tooltip.exploreCost": "Coût d'exploration : ",
     "village.map.tooltip.freeToggles": "+ / − sont gratuits",
-    "village.map.tooltip.activeLevels": "Niveaux actifs : "
+    "village.map.tooltip.activeLevels": "Niveaux actifs : ",
+    "village.map.tooltip.hqUpgrade": "Amélioration QG : "
 ,
     "village.map.panel.explorers": "Éclaireurs"
 ,

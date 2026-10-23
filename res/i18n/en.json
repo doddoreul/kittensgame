@@ -2710,7 +2710,8 @@
 ,
     "village.map.tooltip.exploreCost": "Exploration drains: ",
     "village.map.tooltip.freeToggles": "+/- levels are free",
-    "village.map.tooltip.activeLevels": "Active levels: "
+    "village.map.tooltip.activeLevels": "Active levels: ",
+    "village.map.tooltip.hqUpgrade": "HQ upgrade: "
 ,
     "village.map.panel.explorers": "Explorers"
 ,
