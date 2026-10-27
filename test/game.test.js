@@ -1211,6 +1211,10 @@ test("Legacy map option ships disabled by default", () => {
     expect(game.opts.legacyMap).toBe(false);
 });
 
+test("Keep-one-kitten-per-job option ships disabled by default", () => {
+    expect(game.opts.keepOneKittenPerJob).toBe(false);
+});
+
 test("Map is 100% authored: no TBD, every biome has effects, fauna and rewards", () => {
     const fs = require("fs");
     const village = fs.readFileSync("js/village.js", "utf8");

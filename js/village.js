@@ -384,6 +384,9 @@ dojo.declare("classes.managers.VillageManager", com.nuclearunicorn.core.TabManag
 		if (!job){
 			return;
 		}
+		if (game.opts.keepOneKittenPerJob && this.getJob(job).value <= 1) {
+			return; //keep at least one kitten on the job
+		}
 		game.village.getJob(job).value--;
 		game.village.sim.unassignCraftJobIfEngineer(job, kitten);
 
@@ -3699,6 +3702,14 @@ dojo.declare("classes.village.KittenSim", null, {
 
 		amt = amt || 1;
 
+		if (this.game.opts.keepOneKittenPerJob) {
+			amt = Math.min(amt, Math.max(0, jobKittens.length - 1));
+			if (amt < 1) {
+				this.game.village.updateResourceProduction();
+				return;
+			}
+		}
+
 		if (job == "engineer") {
 			//Prioritize removing kittens that are crafting nothing.
 			for (var i = 0; i < jobKittens.length; i += 1) {
@@ -4761,6 +4772,9 @@ dojo.declare("com.nuclearunicorn.game.ui.JobButtonController", com.nuclearunicor
 
 		if (job.value < amt){
 			amt = job.value;
+		}
+		if (this.game.opts.keepOneKittenPerJob) {
+			amt = Math.min(amt, Math.max(0, job.value - 1));
 		}
 
 		if (amt > 0) {

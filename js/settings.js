@@ -97,6 +97,11 @@ dojo.declare("classes.managers.SettingsManager", com.nuclearunicorn.core.TabMana
 		tooltip: $I("ui.option.legacy.map.tip"),
 		triggerUpdateUI: true
 	}, {
+		name: "keepOneKittenPerJob",
+		defaultValue: false,
+		label: $I("ui.option.keep.one.kitten.per.job"),
+		tooltip: $I("ui.option.keep.one.kitten.per.job.tip")
+	}, {
 		name: "hideBGImage",
 		defaultValue: false,
 		label: $I("ui.option.hide.bgimage"),

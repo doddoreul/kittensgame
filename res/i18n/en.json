@@ -1969,6 +1969,8 @@
     "ui.option.hide.downgrade": "Hide 'downgrade' buttons",
     "ui.option.legacy.map": "Enable the biome map (exploration & squad hunting)",
     "ui.option.legacy.map.tip": "Shows the biome map panel on the village tab. Exploration unlocks with Archery; disabled by default.",
+    "ui.option.keep.one.kitten.per.job": "Keep at least 1 kitten per job",
+    "ui.option.keep.one.kitten.per.job.tip": "Prevents unassigning the last kitten of a job (so no job ever drops to 0).",
     "ui.option.hide.bgimage": "Hide background image <i>(for color schemes where applicable)</i>",
     "ui.option.tooltips.right": "Move tooltips in right column",
     "ui.option.more": "More...",
