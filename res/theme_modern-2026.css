@@ -64,6 +64,7 @@
 .scheme_modern-2026 #game {
 	color: var(--text-color);
 	letter-spacing: 0.01em;
+	width: 99%;
 }
 
 /* columns */
@@ -95,6 +96,7 @@
 	background-color: inherit;
 	border: none;
 	margin-top: 33px;
+	width: 590px;
 }
 .scheme_modern-2026 #rightColumn {
 	min-width: 240px;
