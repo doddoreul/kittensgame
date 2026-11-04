@@ -948,6 +948,15 @@ dojo.declare("classes.ui.DesktopUI", classes.ui.UISystem, {
                 e.stopPropagation();
             }*/
 
+            if (e.type === "keydown" && (e.ctrlKey || e.metaKey) && (e.key === "s" || e.keyCode === 83 || e.which === 83)) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!self.game.isReadOnly()) {
+                    self.game.saveUI();
+                }
+                return false;
+            }
+
             self.keyStates = {
                 shiftKey: e.shiftKey,
                 ctrlKey: e.ctrlKey,
