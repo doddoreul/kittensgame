@@ -559,6 +559,7 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 			var res = dojo.clone(this.resourceData[i]);
 			res.value = 0;
 			res.unlocked = false;
+			res.isLocked = false;
 			if (!res.isRefundable) {
 				res.isRefundable = function(game) {
 					return !this.isNotRefundable;
@@ -630,7 +631,8 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 			//whether resource was marked by user as hidden or visible
 			isHidden: false,
 
-			unlocked: false
+			unlocked: false,
+			isLocked: false
 		};
 		if (name == "wood") {
 			//Wood is displayed as both a normal & a crafted resource.
@@ -641,6 +643,9 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 
 	addRes: function(res, addedValue, allowDuringParadoxes, preventLimitCheck) {
 		if (this.game.calendar.day < 0 && !allowDuringParadoxes || addedValue == 0) {
+			return 0;
+		}
+		if (res && res.isLocked && addedValue < 0) {
 			return 0;
 		}
 
@@ -991,6 +996,7 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 			res.perTickCached = 0;
 			res.unlocked = false;
 			res.isHidden = false;
+			res.isLocked = false;
 
 			if (res.name == "wood") {
 				res.isHiddenFromCrafting = false;
@@ -1000,7 +1006,7 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 
 	save: function(saveData){
 		saveData.resources = this.filterMetadata(
-			this.resources, ["name", "value", "unlocked", "isHidden", "isHiddenFromCrafting"]
+			this.resources, ["name", "value", "unlocked", "isHidden", "isHiddenFromCrafting", "isLocked"]
 		);
 		saveData.res = {
 			isLocked: this.isLocked,
@@ -1045,6 +1051,10 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 				var price = prices[i];
 
 				var res = this.get(price.name);
+				if (res && res.isLocked) {
+					hasRes = false;
+					break;
+				}
 				if (res.value < (price.val * amt)){
 					hasRes = false;
 					break;
@@ -1168,6 +1178,13 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 
 	toggleLock: function(){
 		this.isLocked = !this.isLocked;
+	},
+
+	toggleResourceLock: function(name){
+		var res = this.get(name);
+		if (res) {
+			res.isLocked = !res.isLocked;
+		}
 	},
 
 	isNormalCraftableResource: function(res) {

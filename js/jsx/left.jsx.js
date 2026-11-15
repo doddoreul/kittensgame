@@ -217,6 +217,17 @@ WResourceRow = React.createClass({
                     })
                 ) : null,
 
+            this.props.isEditMode ?
+                $r("div", {
+                    className:"res-cell res-lock",
+                    style: {cursor: "pointer", textAlign: "center"},
+                    onClick: this.toggleResourceLock,
+                    title: res.isLocked ? "Unlock resource" : "Lock resource",
+                    role: "gridcell",
+                },
+                    res.isLocked ? "🔒" : "🔓"
+                ) : null,
+
             $r("div", {
                 className:"res-cell resource-name", 
                 style:resNameCss,
@@ -245,6 +256,15 @@ WResourceRow = React.createClass({
 
     toggleView: function(){
         game.resPool.setResourceIsHidden(this.props.resource.name, !this.props.resource.isHidden);
+    },
+
+    toggleResourceLock: function(e){
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        game.resPool.toggleResourceLock(this.props.resource.name);
+        this.forceUpdate();
     },
 
     //Parameter is optional.
@@ -490,6 +510,15 @@ WCraftRow = React.createClass({
                         style:{display:"inline-block"},
                     })
                 ) : null,
+            this.props.isEditMode ?
+                $r("div", {
+                    className:"res-cell res-lock",
+                    style: {cursor: "pointer", textAlign: "center"},
+                    onClick: this.toggleResourceLock,
+                    title: res.isLocked ? "Unlock resource" : "Lock resource",
+                },
+                    res.isLocked ? "🔒" : "🔓"
+                ) : null,
             $r("div", {
                 className:"res-cell resource-name", 
                 style: resNameCss,
@@ -509,6 +538,15 @@ WCraftRow = React.createClass({
         if (this.props.isEditMode || e.ctrlKey){
             this.toggleView();
         } 
+    },
+
+    toggleResourceLock: function(e){
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        game.resPool.toggleResourceLock(this.props.resource.name);
+        this.forceUpdate();
     },
 
     toggleView: function(){
