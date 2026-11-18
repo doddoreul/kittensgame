@@ -19,6 +19,15 @@
           "parserOptions": {
             "ecmaVersion": 6
           }
+        },
+        {
+          "files": ["server.js"],
+          "env": {
+            "node": true
+          },
+          "parserOptions": {
+            "ecmaVersion": 2020
+          }
         }
     ],
     "ignorePatterns": ["lib/**/*", "node_modules/**/*", "simulate-combat.js"],

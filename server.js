@@ -24,7 +24,7 @@ const MIME = {
 
 http.createServer((req, res) => {
   let url = decodeURIComponent(req.url.split("?")[0]);
-  if (url === "/") url = "/index.html";
+  if (url === "/") {url = "/index.html";}
   const filePath = path.join(ROOT, url);
   // prevent path traversal outside ROOT
   if (!filePath.startsWith(ROOT + path.sep) && filePath !== ROOT) {
