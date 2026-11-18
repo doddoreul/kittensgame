@@ -134,7 +134,7 @@
 .scheme_modern-2026 .tabsContainer a.tab {
 	color: var(--m26-text-dim);
 	border-radius: 0;
-	padding: 5px 12px;
+	padding: 5px 8px;
 	font-size: var(--font-size-meta);
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
