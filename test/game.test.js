@@ -1330,3 +1330,22 @@ test("HQ upgrade model carries a visible manpower price", () => {
     const secondLvl = controller.getPrices(model);
     expect(secondLvl[0].val).toBeCloseTo(312.5, 5);
 });
+
+test("catch-up replays ticks missed while the tab was hidden", () => {
+    game.lastTickWallTime = Date.now() - 10 * 1000; //10s hidden = 50 ticks @ 5 tps
+    const start = game.ticks;
+    game.catchUpSinceLastTick();
+    const replayed = game.ticks - start;
+    expect(replayed).toBeGreaterThanOrEqual(45);
+    expect(replayed).toBeLessThanOrEqual(55);
+
+    //the replayed period is consumed: an immediate second call must not re-replay it
+    const after = game.ticks;
+    game.catchUpSinceLastTick();
+    expect(game.ticks).toBe(after);
+
+    //long absences are capped instead of freezing the tab
+    game.lastTickWallTime = Date.now() - 60 * 60 * 1000;
+    game.catchUpSinceLastTick();
+    expect(game.ticks - after).toBeLessThanOrEqual(1500);
+});

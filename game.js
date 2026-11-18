@@ -2295,6 +2295,11 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 
 	ticksBeforeSave: 400,	//80 seconds ~
 
+	//wall-clock time of the last tick, used to catch up after the tab was hidden
+	lastTickWallTime: 0,
+	//true while replaying missed ticks (skips per-tick UI rendering)
+	catchingUp: false,
+
 	//in ticks
 	autosaveFrequency: 400,
 
@@ -4476,7 +4481,9 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
         //--------------------
         //  Update UI state
         //--------------------
-        this.ui.update();
+        if (!this.catchingUp) {
+            this.ui.update();
+        }
 
 		this.timer.afterUpdate();
 	},
@@ -5293,7 +5300,48 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 		// Ensure free kitten markers are up-to-date.
 		this.villageTab.updateTab();
 		this.workshopTab.updateTab();
+
+		//replay ticks missed while the tab was hidden/unloaded
+		document.addEventListener("visibilitychange", dojo.hitch(this, function(){
+			if (!document.hidden) {
+				this.catchUpSinceLastTick();
+			}
+		}));
+
 		this._publish("game/start");
+	},
+
+	/**
+	 * Browsers throttle/suspend timers and workers of hidden tabs, so ticks are
+	 * missed while away; replay them on return.
+	 * shortcut: catch-up capped at 1500 ticks (~5 min of game time), upgrade path:
+	 * persist the backlog in the save and spread it over several frames.
+	 */
+	catchUpSinceLastTick: function(){
+		if (this.isReadOnly() || this.isPaused || !this.lastTickWallTime) {
+			return;
+		}
+		var elapsed = Date.now() - this.lastTickWallTime;
+		var missed = Math.floor(elapsed / (1000 / this.ticksPerSecond));
+		if (missed <= 1) {
+			return;
+		}
+		missed = Math.min(missed, 1500);
+
+		this.catchingUp = true;
+		try {
+			for (var i = 0; i < missed; i++) {
+				this.update();
+				this.calendar.tick();
+				this.ticks++;
+			}
+		} finally {
+			this.catchingUp = false;
+		}
+		//the replayed period is now accounted for
+		this.lastTickWallTime = Date.now();
+		//single UI render for the whole batch
+		this.ui.update();
 	},
 
 	/**
@@ -5314,6 +5362,7 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 
 
 	tick: function(){
+		this.lastTickWallTime = Date.now();
 		// Even if the game is paused, scheduler should still be able to obtain a focus
 		// to handle cases like save/load/reset
 		this.timer.updateScheduledEvents();
