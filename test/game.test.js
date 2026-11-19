@@ -1349,3 +1349,20 @@ test("catch-up replays ticks missed while the tab was hidden", () => {
     game.catchUpSinceLastTick();
     expect(game.ticks - after).toBeLessThanOrEqual(1500);
 });
+
+test("throttled ticks while the tab is hidden are banked and replayed", () => {
+    let hidden = true;
+    Object.defineProperty(document, "hidden", { configurable: true, get: () => hidden });
+
+    game.tickDeficitMs = 0;
+    game.lastTickWallTime = Date.now() - 1000; //1s between ticks while hidden, expected 200ms
+    game.tick();
+    expect(game.tickDeficitMs).toBeGreaterThanOrEqual(700); //~800ms of lateness banked
+
+    hidden = false;
+    game.lastTickWallTime = Date.now(); //just ticked, no extra elapsed time
+    const start = game.ticks;
+    game.catchUpSinceLastTick();
+    expect(game.ticks - start).toBeGreaterThanOrEqual(3); //deficit alone replays ~4 ticks
+    expect(game.tickDeficitMs).toBe(0);
+});

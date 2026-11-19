@@ -2297,6 +2297,8 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 
 	//wall-clock time of the last tick, used to catch up after the tab was hidden
 	lastTickWallTime: 0,
+	//accumulated lateness (ms) of ticks fired while the tab was hidden and throttled
+	tickDeficitMs: 0,
 	//true while replaying missed ticks (skips per-tick UI rendering)
 	catchingUp: false,
 
@@ -5321,8 +5323,8 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 		if (this.isReadOnly() || this.isPaused || !this.lastTickWallTime) {
 			return;
 		}
-		var elapsed = Date.now() - this.lastTickWallTime;
-		var missed = Math.floor(elapsed / (1000 / this.ticksPerSecond));
+		var interval = 1000 / this.ticksPerSecond;
+		var missed = Math.floor((this.tickDeficitMs + (Date.now() - this.lastTickWallTime)) / interval);
 		if (missed <= 1) {
 			return;
 		}
@@ -5331,14 +5333,13 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 		this.catchingUp = true;
 		try {
 			for (var i = 0; i < missed; i++) {
-				this.update();
-				this.calendar.tick();
-				this.ticks++;
+				this.tick();
 			}
 		} finally {
 			this.catchingUp = false;
 		}
 		//the replayed period is now accounted for
+		this.tickDeficitMs = 0;
 		this.lastTickWallTime = Date.now();
 		//single UI render for the whole batch
 		this.ui.update();
@@ -5362,7 +5363,16 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 
 
 	tick: function(){
-		this.lastTickWallTime = Date.now();
+		var now = Date.now();
+		//hidden tabs get throttled (worker fires slower than ticksPerSecond); bank the
+		//lateness so catchUpSinceLastTick can replay it instead of losing game time
+		if (document.hidden && this.lastTickWallTime) {
+			var late = now - this.lastTickWallTime - (1000 / this.ticksPerSecond);
+			if (late > 0) {
+				this.tickDeficitMs += late;
+			}
+		}
+		this.lastTickWallTime = now;
 		// Even if the game is paused, scheduler should still be able to obtain a focus
 		// to handle cases like save/load/reset
 		this.timer.updateScheduledEvents();
