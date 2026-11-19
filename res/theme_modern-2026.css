@@ -177,6 +177,12 @@
 	border-color: var(--border-color);
 }
 
+/* temporary shortfall: red title instead of the ghosted disabled look */
+.scheme_modern-2026 .btn.modern.disabled.shortage {
+	opacity: 1;
+	color: #FF3030;
+}
+
 .scheme_modern-2026 .btn.modern a {
 	color: var(--link-color);
 	background: var(--link-background-color);

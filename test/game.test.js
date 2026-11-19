@@ -1366,3 +1366,18 @@ test("throttled ticks while the tab is hidden are banked and replayed", () => {
     expect(game.ticks - start).toBeGreaterThanOrEqual(3); //deficit alone replays ~4 ticks
     expect(game.tickDeficitMs).toBe(0);
 });
+
+test("unaffordable-but-storable buttons get the shortage state", () => {
+    const controller = new classes.ui.time.ChronoforgeBtnController(game);
+    game.opts.highlightUnavailable = true;
+
+    const model = controller.fetchModel({ id: "ressourceRetrieval" }); //1000 TCs, no storage cap
+    controller.updateEnabled(model);
+    expect(model.enabled).toBe(false);
+    expect(model.shortage).toBe(true); //storage has room → red title
+
+    game.resPool.get("timeCrystal").maxValue = 500; //price can never fit
+    controller.updateEnabled(model);
+    expect(model.enabled).toBe(false);
+    expect(model.shortage).toBe(false); //storage-capped → plain grey
+});

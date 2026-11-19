@@ -689,6 +689,7 @@ var ButtonController = dojo.declare("com.nuclearunicorn.game.ui.ButtonController
 			// ---
 			highlightUnavailable: false,
 			resourceIsLimited: "",
+			shortage: false, //red title: affordable later, storage has room
 			multiplyEffects: false,
 			isInQueue: false //Used for tooltip rendering (queued embassies)
 		};
@@ -728,6 +729,9 @@ var ButtonController = dojo.declare("com.nuclearunicorn.game.ui.ButtonController
 		var limited = this.game.resPool.isStorageLimited(model.prices);
 		//---- now highlight some stuff in vanilla js way ---
 		model.resourceIsLimited = limited;
+		//red title = not affordable yet, but storage can still fit it;
+		//storage-capped buttons stay plain grey (resourceIsLimited still drives filters)
+		model.shortage = !model.enabled && !limited;
 	},
 
 	updateVisible: function(model) {
@@ -967,20 +971,25 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 	updateEnabled: function(){
 		if ( this.domNode ){
 			var hasClass = dojo.hasClass(this.domNode, "disabled");
-			var hasClassLimited = dojo.hasClass(this.domNode, "limited");
+			var hasClassShortage = dojo.hasClass(this.domNode, "shortage");
 			if (this.model.enabled){
 				if (hasClass){
 					dojo.removeClass(this.domNode, "disabled");
 				}
-				if (hasClassLimited){
-					dojo.removeClass(this.domNode, "limited");
+				if (hasClassShortage){
+					dojo.removeClass(this.domNode, "shortage");
 				}
 			} else {
 				if (!hasClass){
 					dojo.addClass(this.domNode, "disabled");
 				}
-				if (!hasClassLimited && this.model.resourceIsLimited){
-					dojo.addClass(this.domNode, "limited");
+				//red title = temporary shortfall (storage can still fit the price);
+				//storage-capped buttons stay plain grey
+				if (this.model.shortage && !hasClassShortage){
+					dojo.addClass(this.domNode, "shortage");
+				}
+				if (!this.model.shortage && hasClassShortage){
+					dojo.removeClass(this.domNode, "shortage");
 				}
 			}			
 		}
@@ -1056,7 +1065,10 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 		}, 70, function(){
 			btnNode.animate({
 				opacity: 1.0
-			}, 70);
+			}, 70, function(){
+				//drop the inline opacity so the CSS disabled state (theme opacity) applies again
+				btnNode.css("opacity", "");
+			});
 		});
 	},
 
@@ -1064,7 +1076,10 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 		if (this.game.isReadOnly()){
 			return;
 		}
-		this.animate();
+		//never flash a disabled button: its only feedback is the cursor/theme state
+		if (this.model.enabled){
+			this.animate();
+		}
 		var self = this;
 		var result = this.controller.buyItem(this.model, event);
 		if (result.itemBought){

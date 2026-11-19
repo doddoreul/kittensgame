@@ -422,6 +422,11 @@ select>option {
     color: #999;
 }
 
+/* disabled but storable: red title = not affordable yet (storage has room) */
+.disabled.shortage {
+    color: #FF3030;
+}
+
 .tipr_content {
     border: 1px solid black;
     background-color: #F6F6F6;
