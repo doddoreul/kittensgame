@@ -2299,6 +2299,8 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 	lastTickWallTime: 0,
 	//accumulated lateness (ms) of ticks fired while the tab was hidden and throttled
 	tickDeficitMs: 0,
+	//missed ticks still to replay after a tab return (sliced, see runCatchUpChunk)
+	catchUpRemaining: 0,
 	//true while replaying missed ticks (skips per-tick UI rendering)
 	catchingUp: false,
 
@@ -5315,12 +5317,14 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 
 	/**
 	 * Browsers throttle/suspend timers and workers of hidden tabs, so ticks are
-	 * missed while away; replay them on return.
-	 * shortcut: catch-up capped at 1500 ticks (~5 min of game time), upgrade path:
-	 * persist the backlog in the save and spread it over several frames.
+	 * missed while away; replay them on return. Capped at 24h of game time so a
+	 * long absence never hands out more than a day of production.
+	 * shortcut: cap = 24h of ticks replayed in 500-tick slices (still tick-by-tick,
+	 * minutes of background CPU after a very long absence); upgrade path: redshift-
+	 * style fast-forward per system instead of replaying every tick.
 	 */
 	catchUpSinceLastTick: function(){
-		if (this.isReadOnly() || this.isPaused || !this.lastTickWallTime) {
+		if (this.isReadOnly() || this.isPaused || !this.lastTickWallTime || this.catchUpRemaining > 0) {
 			return;
 		}
 		var interval = 1000 / this.ticksPerSecond;
@@ -5328,21 +5332,40 @@ var GamePage = dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 		if (missed <= 1) {
 			return;
 		}
-		missed = Math.min(missed, 1500);
+		missed = Math.min(missed, 24 * 60 * 60 * this.ticksPerSecond);
 
+		this.tickDeficitMs = 0;
+		this.lastTickWallTime = Date.now();
+		this.catchUpRemaining = missed;
+		this.runCatchUpChunk();
+	},
+
+	//replays at most 500 missed ticks per slice so the tab stays responsive
+	runCatchUpChunk: function(){
+		if (this.isReadOnly() || this.isPaused) {
+			this.catchUpRemaining = 0;
+		}
+		if (this.catchUpRemaining <= 0) {
+			this.ui.update();
+			return;
+		}
+		var slice = Math.min(this.catchUpRemaining, 500);
 		this.catchingUp = true;
 		try {
-			for (var i = 0; i < missed; i++) {
+			for (var i = 0; i < slice; i++) {
 				this.tick();
 			}
 		} finally {
 			this.catchingUp = false;
 		}
-		//the replayed period is now accounted for
-		this.tickDeficitMs = 0;
-		this.lastTickWallTime = Date.now();
-		//single UI render for the whole batch
-		this.ui.update();
+		this.catchUpRemaining -= slice;
+		if (this.catchUpRemaining > 0) {
+			var self = this;
+			setTimeout(function(){ self.runCatchUpChunk(); }, 0);
+		} else {
+			//single UI render for the whole batch
+			this.ui.update();
+		}
 	},
 
 	/**

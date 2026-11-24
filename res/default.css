@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 /* ==============================================================
@@ -92,6 +93,7 @@ img.loader {
     vertical-align: baseline;
 
     overflow: auto;
+    overflow-x: hidden;
     width: 1300px;
     border-radius: var(--radius-lg);
 }
@@ -167,8 +169,22 @@ img.loader {
     overflow-y: auto;
     overflow-x: hidden;
 
+    /* hide scrollbar but keep scrolling */
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge (legacy) */
+
     height: calc(100% - 20px);
     min-height: calc(100% - 20px);
+}
+
+#leftColumn::-webkit-scrollbar {
+    display: none;                /* Chrome, Safari, Opera */
+}
+
+/* resource lock toggles in the left column: theme-colored, not yellow emoji */
+.res-lock {
+    color: var(--text-color, #000);
+    user-select: none;
 }
 
 #midColumn {
@@ -210,7 +226,7 @@ div#gameLog {
 
 #footerLinks {
     position: absolute;
-    bottom: 10px;
+    bottom: 0 !important;
     right: 5px;
 }
 

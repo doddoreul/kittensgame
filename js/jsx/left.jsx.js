@@ -217,16 +217,20 @@ WResourceRow = React.createClass({
                     })
                 ) : null,
 
-            this.props.isEditMode ?
-                $r("div", {
-                    className:"res-cell res-lock",
-                    style: {cursor: "pointer", textAlign: "center"},
-                    onClick: this.toggleResourceLock,
-                    title: res.isLocked ? "Unlock resource" : "Lock resource",
-                    role: "gridcell",
-                },
-                    res.isLocked ? "🔒" : "🔓"
-                ) : null,
+            $r("div", {
+                className:"res-cell res-lock",
+                style: {cursor: "pointer", textAlign: "center"},
+                onClick: this.toggleResourceLock,
+                title: res.isLocked ? "Unlock resource" : "Lock resource",
+                role: "gridcell",
+            },
+                res.isLocked
+                    ? $r("svg", {width:14, height:14, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", style:{verticalAlign:"middle"}},
+                        $r("rect", {x:3, y:11, width:18, height:11, rx:2, ry:2}),
+                        $r("path", {d:"M7 11V7a5 5 0 0 1 10 0v4"}))
+                    : $r("svg", {width:14, height:14, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", style:{verticalAlign:"middle"}},
+                        $r("rect", {x:3, y:11, width:18, height:11, rx:2, ry:2}),
+                        $r("path", {d:"M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 9.9-1"}))            ),
 
             $r("div", {
                 className:"res-cell resource-name", 
@@ -510,15 +514,19 @@ WCraftRow = React.createClass({
                         style:{display:"inline-block"},
                     })
                 ) : null,
-            this.props.isEditMode ?
-                $r("div", {
-                    className:"res-cell res-lock",
-                    style: {cursor: "pointer", textAlign: "center"},
-                    onClick: this.toggleResourceLock,
-                    title: res.isLocked ? "Unlock resource" : "Lock resource",
-                },
-                    res.isLocked ? "🔒" : "🔓"
-                ) : null,
+            $r("div", {
+                className:"res-cell res-lock",
+                style: {cursor: "pointer", textAlign: "center"},
+                onClick: this.toggleResourceLock,
+                title: res.isLocked ? "Unlock resource" : "Lock resource",
+            },
+                res.isLocked
+                    ? $r("svg", {width:14, height:14, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", style:{verticalAlign:"middle"}},
+                        $r("rect", {x:3, y:11, width:18, height:11, rx:2, ry:2}),
+                        $r("path", {d:"M7 11V7a5 5 0 0 1 10 0v4"}))
+                    : $r("svg", {width:14, height:14, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", style:{verticalAlign:"middle"}},
+                        $r("rect", {x:3, y:11, width:18, height:11, rx:2, ry:2}),
+                        $r("path", {d:"M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 9.9-1"}))            ),
             $r("div", {
                 className:"res-cell resource-name", 
                 style: resNameCss,
@@ -529,7 +537,6 @@ WCraftRow = React.createClass({
             ),
             $r("div", {className:"res-cell resource-value", ref:"perTickNode", title: resVal}, resVal),
             !game.isReadOnly() ? $r(WCraftShortcut, {resource: res, recipe: recipe, craftFixed:1, craftPercent: 0.01}) : null,
-            !game.isReadOnly() ? $r(WCraftShortcut, {resource: res, recipe: recipe, craftFixed:25, craftPercent: 0.05}) : null,
             !game.isReadOnly() ? $r(WCraftShortcut, {resource: res, recipe: recipe, craftFixed:100, craftPercent: 0.1}) : null,
             !game.isReadOnly() ? $r(WCraftShortcut, {resource: res, recipe: recipe, craftPercent: 1}): null,
         ]);

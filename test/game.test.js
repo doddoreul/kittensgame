@@ -1343,11 +1343,18 @@ test("catch-up replays ticks missed while the tab was hidden", () => {
     const after = game.ticks;
     game.catchUpSinceLastTick();
     expect(game.ticks).toBe(after);
+});
 
-    //long absences are capped instead of freezing the tab
-    game.lastTickWallTime = Date.now() - 60 * 60 * 1000;
+test("catch-up is capped at 24h of game time and replayed in slices", () => {
+    game.lastTickWallTime = Date.now() - 25 * 60 * 60 * 1000; //25h away
+    const cap = 24 * 60 * 60 * game.ticksPerSecond; //432000 ticks
+    const start = game.ticks;
     game.catchUpSinceLastTick();
-    expect(game.ticks - after).toBeLessThanOrEqual(1500);
+    //first slice runs synchronously (<=500 ticks), the rest is scheduled
+    expect(game.ticks - start).toBeLessThanOrEqual(500);
+    expect(game.catchUpRemaining).toBeGreaterThan(0);
+    expect(game.catchUpRemaining + (game.ticks - start)).toBe(cap);
+    game.catchUpRemaining = 0; //cancel the scheduled slices
 });
 
 test("throttled ticks while the tab is hidden are banked and replayed", () => {
