@@ -1749,6 +1749,7 @@
     "techs.panel.label": "Techs",
 
     "time.AccelerateTimeBtn.label": "Tempus Fugit",
+    "time.autoTempusFugit": "Auto Tempus Fugit (>=3000)",
     "time.AccelerateTimeBtn.desc": "Accelerate and slow time at your whim (+50% speed up)",
     "time.AccelerateTimeBtn.tooltip.normal": "Normal time flow",
     "time.AccelerateTimeBtn.tooltip.accelerated": "Accelerated time flow",
@@ -1984,6 +1985,8 @@
     "ui.option.compress.savefile": "Compress exported save file <i>(experimental)<br>\nWARNING: it generates save files that are NOT COMPATIBLE with older versions.</i>",
     "ui.option.hodl": "HODL mode",
     "ui.option.hodl.tip": "Use dynamic b-coin value",
+    "ui.option.qol": "Quality of Life improvements",
+    "ui.option.qol.tip": "Enable/disable bundled QoL enhancements",
     "ui.option.dev.mode.only": "(Only available in Dev Mode)",
     "ui.option.export.button": "Export",
     "ui.option.import.button": "Import",

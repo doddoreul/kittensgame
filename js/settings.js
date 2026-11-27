@@ -193,6 +193,13 @@ dojo.declare("classes.managers.SettingsManager", com.nuclearunicorn.core.TabMana
 			game.diplomacy.sellBcoin(oldValue);
 		}
 	}, {
+		name: "enableQoL",
+		defaultValue: true,
+		label: $I("ui.option.qol"),
+		tooltip: $I("ui.option.qol.tip"),
+		isExtra: true,
+		triggerUpdateUI: true
+	}, {
 		name: "disableCMBR", //CMBR was an old feature which granted a global production & storage bonus.
 		defaultValue: false,
 		devModeOnly: true

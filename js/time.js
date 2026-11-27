@@ -9,6 +9,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
     //should not be visible to player other than on time tab
     heat: 0,
     isAccelerated: false,
+    autoTempusFugit: false,
 
     timestamp: null,    /*please don't move timestamp to resource*/
 
@@ -38,6 +39,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
             heat: this.heat,
             testShatter: this.testShatter, //temporary
             isAccelerated: this.isAccelerated,
+            autoTempusFugit: this.autoTempusFugit,
             cfu: this.filterMetadata(this.chronoforgeUpgrades, ["name", "val", "on", "heat", "delayTicks", "unlocked", "isAutomationEnabled"]),
             vsu: this.filterMetadata(this.voidspaceUpgrades, ["name", "val", "on"]),
             queueItems: this.queue.queueItems,
@@ -65,6 +67,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
         this.heat = saveData["time"].heat || 0;
         this.testShatter = saveData["time"].testShatter || 0; //temporary
         this.isAccelerated = saveData["time"].isAccelerated || false;
+        this.autoTempusFugit = saveData["time"].autoTempusFugit || false;
 		this.loadMetadata(this.chronoforgeUpgrades, saveData.time.cfu, "chronoforgeUpgrades");
 		this.loadMetadata(this.voidspaceUpgrades, saveData.time.vsu, "voidspaceUpgrades");
 
@@ -150,6 +153,12 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
     },
 
     update: function(){
+        //QoL: auto-start Tempus Fugit once enough flux is banked
+        if (this.autoTempusFugit && !this.isAccelerated && this.game.opts.enableQoL
+            && !this.game.isPaused && !this.game.isReadOnly()
+            && this.game.resPool.get("temporalFlux").value >= 3000) {
+            this.isAccelerated = true;
+        }
         if (this.isAccelerated && this.game.resPool.get("temporalFlux").value > 0){
             this.game.resPool.addResEvent("temporalFlux", -1);
         }
@@ -1141,6 +1150,15 @@ dojo.declare("classes.ui.TimeControlWgt", [mixin.IChildrenAware, mixin.IGameAwar
 
         var btnsContainer = dojo.create("div", {style:{paddingTop:"20px"}}, div);
         this.inherited(arguments, [btnsContainer]);
+
+        //QoL: auto-start Tempus Fugit when enough flux is banked
+        var autoDiv = dojo.create("div", {style:{paddingTop:"8px"}}, div);
+        var autoCheckbox = dojo.create("input", {type:"checkbox", id:"autoTempusFugit"}, autoDiv);
+        dojo.create("label", {for:"autoTempusFugit", innerHTML: " " + $I("time.autoTempusFugit")}, autoDiv);
+        dojo.connect(autoCheckbox, "onclick", this, function(){
+            this.game.time.autoTempusFugit = autoCheckbox.checked;
+        });
+        this.autoCheckbox = autoCheckbox;
     },
 
     update: function() {
@@ -1166,6 +1184,10 @@ dojo.declare("classes.ui.TimeControlWgt", [mixin.IChildrenAware, mixin.IGameAwar
             this.timeSpan.innerHTML += " (" + (remainingHeatDissipationInSeconds < 1 ? "0" + $I("unit.s") : this.game.toDisplaySeconds(remainingHeatDissipationInSeconds)) + " / " + this.game.toDisplaySeconds(heatMax / heatPerSecond) + ")";
         }
 
+        if (this.autoCheckbox) {
+            this.autoCheckbox.parentNode.style.display = this.game.opts.enableQoL ? "" : "none";
+            this.autoCheckbox.checked = this.game.time.autoTempusFugit;
+        }
         this.inherited(arguments);
     }
 });
