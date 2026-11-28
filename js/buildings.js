@@ -132,6 +132,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 
 	groupBuildings: false,
 	twoRows: false,
+	favoriteBuildings: {},
 
 	//pollution things
 	cathPollution: 0,
@@ -2857,6 +2858,25 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		return building.defaultUnlockable || building.unlockable;
 	},
 
+	isFavorite: function(name){
+		return !!this.favoriteBuildings[name];
+	},
+
+	toggleFavorite: function(name){
+		if (this.favoriteBuildings[name]) {
+			delete this.favoriteBuildings[name];
+		} else {
+			this.favoriteBuildings[name] = true;
+		}
+	},
+
+	hasFavorites: function(){
+		for (var k in this.favoriteBuildings) {
+			if (this.favoriteBuildings[k]) { return true; }
+		}
+		return false;
+	},
+
 	save: function(saveData){
 		saveData.buildings = this.filterMetadata(this.buildingsData, ["name", "unlocked", "val", "on", "stage", "jammed", "isAutomationEnabled"], 
 			function (key, value){
@@ -2875,18 +2895,26 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		}
 		saveData.bldData.groupBuildings = this.groupBuildings;
 		saveData.bldData.twoRows = this.twoRows;
+		saveData.bldData.favoriteBuildings = Object.keys(this.favoriteBuildings);
 		saveData.cathPollution = this.cathPollution;
 	},
 
 	load: function(saveData){
 		this.groupBuildings = saveData.bldData ? saveData.bldData.groupBuildings : false;
 		this.twoRows = saveData.bldData ? saveData.bldData.twoRows : false;
+		this.favoriteBuildings = {};
+		if (saveData.bldData && saveData.bldData.favoriteBuildings) {
+			for (var i = 0; i < saveData.bldData.favoriteBuildings.length; i++) {
+				this.favoriteBuildings[saveData.bldData.favoriteBuildings[i]] = true;
+			}
+		}
 		this.loadMetadata(this.buildingsData, saveData.buildings, "buildings");
 		this.cathPollution = saveData.cathPollution|| 0;
 		this.calculatePollutionEffects();
 	},
 
 	resetState: function(){
+		this.favoriteBuildings = {};
 		for (var i = 0; i < this.buildingsData.length; i++){
 			var bld = this.buildingsData[i];
 

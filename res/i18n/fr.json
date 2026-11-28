@@ -1921,6 +1921,7 @@
     "ui.option.force.lz": "Toujours compresser la sauvegarde en mémoire, en UTF-16 <i>(expérimental)</i>",
     "ui.option.compress.savefile": "Compresser le fichier de sauvegarde exporté <i>(expérimental)<br>\nATTENTION : génère des fichiers de sauvegarde NON COMPATIBLES avec les anciennes versions.</i>",
     "ui.option.hodl": "Mode HODL",
+    "ui.favorite": "Favori",
     "ui.option.hodl.tip": "Utiliser une valeur dynamique du b-coin",
     "ui.option.qol": "Améliorations QoL",
     "ui.option.qol.tip": "Activer/désactiver les améliorations de qualité de vie",

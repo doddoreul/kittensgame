@@ -1984,6 +1984,7 @@
     "ui.option.force.lz": "Always compress in-memory save, in UTF-16 <i>(experimental)</i>",
     "ui.option.compress.savefile": "Compress exported save file <i>(experimental)<br>\nWARNING: it generates save files that are NOT COMPATIBLE with older versions.</i>",
     "ui.option.hodl": "HODL mode",
+    "ui.favorite": "Favorite",
     "ui.option.hodl.tip": "Use dynamic b-coin value",
     "ui.option.qol": "Quality of Life improvements",
     "ui.option.qol.tip": "Enable/disable bundled QoL enhancements",

@@ -871,6 +871,14 @@ var ButtonController = dojo.declare("com.nuclearunicorn.game.ui.ButtonController
 				reason: "not-enabled"
 			};
 		}
+		//QoL: building whitelist (favorites) guard
+		if (model.options && model.options.building && this.game.bld && typeof(this.game.bld.hasFavorites) === "function"
+			&& this.game.bld.hasFavorites() && !this.game.bld.isFavorite(model.options.building)) {
+			return {
+				itemBought: false,
+				reason: "not-enabled"
+			};
+		}
 		//Else, we meet all requirements to buy this item:
 		if (!event) { event = {}; /*event is an optional parameter*/ }
 		this.clickHandler(model, event);
@@ -1791,6 +1799,18 @@ var BuildingBtnController = dojo.declare("com.nuclearunicorn.game.ui.BuildingBtn
 		if (typeof(model.metadata.on) != "undefined") {
 			model.on = model.metadata.on;
 		}
+		//QoL: favorite (whitelist) toggle for buildings
+		if (model.options && model.options.building && model.metadata && model.metadata.name && this.game.bld && typeof(this.game.bld.isFavorite) === "function") {
+			var self = this;
+			model.favoriteLink = {
+				title: this.game.bld.isFavorite(model.metadata.name) ? "★" : "☆",
+				tooltip: $I("ui.favorite"),
+				enabled: true,
+				handler: function(btn){
+					self.handleFavoriteClick(model);
+				}
+			};
+		}
 		model.hasResourceHover = true;
 		return model;
 	},
@@ -2016,6 +2036,12 @@ var BuildingBtnController = dojo.declare("com.nuclearunicorn.game.ui.BuildingBtn
 		var building = model.metadata;
 		building.isAutomationEnabled = !building.isAutomationEnabled;
 		this.game.upgrade({buildings: [building.name]});
+	},
+
+	handleFavoriteClick: function(model) {
+		var building = model.metadata;
+		this.game.bld.toggleFavorite(building.name);
+		this.game.ui.render();
 	}
 });
 
@@ -2107,6 +2133,10 @@ dojo.declare("com.nuclearunicorn.game.ui.BuildingBtn", com.nuclearunicorn.game.u
 
 		if (this.model.toggleAutomationLink){
 			this.toggleAutomation = this.addLink(this.model.toggleAutomationLink);
+		}
+
+		if (this.model.favoriteLink){
+			this.favorite = this.addLink(this.model.favoriteLink);
 		}
 	},
 
